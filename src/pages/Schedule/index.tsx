@@ -18,7 +18,7 @@ const matches = [
   },
 ];
 
-const gvardiyaLogo = "/src/assets/gvardiya.JPG";
+const gvardiyaLogo = "/src/assets/gvardiya.jpg";
 
 export default function Schedule() {
   const navigate = useNavigate();
