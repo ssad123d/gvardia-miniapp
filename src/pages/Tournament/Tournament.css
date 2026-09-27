@@ -1,0 +1,278 @@
+.tournament-page {
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 18px 14px 125px;
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(255, 210, 28, 0.11),
+      transparent 35%
+    ),
+    #090909;
+  color: #ffffff;
+}
+
+.tournament-back {
+  border: none;
+  background: transparent;
+  color: #ffd21c;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 4px 0;
+  cursor: pointer;
+}
+
+.tournament-hero {
+  margin-top: 18px;
+  padding: 25px 20px 23px;
+  border: 1px solid #303030;
+  border-radius: 20px;
+  background:
+    linear-gradient(
+      135deg,
+      #1b1b1b 0%,
+      #111111 60%,
+      #0c0c0c 100%
+    );
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.tournament-hero-icon {
+  width: 58px;
+  height: 58px;
+  margin: 0 auto 13px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 17px;
+  background: #ffd21c;
+  color: #111111;
+
+  font-size: 27px;
+
+  box-shadow: 0 0 25px rgba(255, 210, 28, 0.2);
+}
+
+.tournament-hero-status {
+  display: inline-block;
+  padding: 6px 10px;
+  margin-bottom: 12px;
+
+  border: 1px solid rgba(255, 210, 28, 0.45);
+  border-radius: 8px;
+
+  color: #ffd21c;
+  background: rgba(255, 210, 28, 0.1);
+
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+.tournament-hero h1 {
+  margin: 0;
+
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: -0.7px;
+}
+
+.tournament-period {
+  margin: 7px 0 0;
+
+  color: #ffd21c;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.tournament-description {
+  max-width: 330px;
+  margin: 14px auto 0;
+
+  color: #858585;
+  font-size: 10px;
+  line-height: 1.55;
+}
+
+.tournament-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  margin-top: 18px;
+}
+
+.tournament-section-card {
+  width: 100%;
+  min-height: 68px;
+
+  display: grid;
+  grid-template-columns: 44px 1fr 20px;
+  align-items: center;
+  gap: 12px;
+
+  padding: 10px 13px;
+
+  border: 1px solid #2d2d2d;
+  border-radius: 15px;
+
+  background: #141414;
+  color: #ffffff;
+
+  text-align: left;
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.tournament-section-card:hover {
+  border-color: rgba(255, 210, 28, 0.5);
+}
+
+.tournament-section-card:active {
+  transform: scale(0.985);
+}
+
+.section-icon {
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 12px;
+
+  background: #222222;
+  color: #ffd21c;
+
+  font-size: 17px;
+}
+
+.tournament-section-card strong {
+  display: block;
+
+  color: #eeeeee;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.tournament-section-card span {
+  display: block;
+
+  margin-top: 4px;
+
+  color: #707070;
+  font-size: 9px;
+  line-height: 1.3;
+}
+
+.tournament-section-card b {
+  color: #ffd21c;
+  font-size: 23px;
+  font-weight: 300;
+  text-align: right;
+}
+
+.tournament-section-card.disabled {
+  cursor: default;
+  opacity: 0.75;
+}
+
+.tournament-section-card.disabled:active {
+  transform: none;
+}
+
+.tournament-info {
+  display: flex;
+  gap: 11px;
+
+  margin-top: 15px;
+  padding: 14px;
+
+  border: 1px solid #252525;
+  border-radius: 15px;
+
+  background: #111111;
+}
+
+.tournament-info-icon {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: rgba(255, 210, 28, 0.12);
+  color: #ffd21c;
+
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.tournament-info strong {
+  display: block;
+
+  margin-bottom: 5px;
+
+  color: #dddddd;
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.tournament-info p {
+  margin: 0;
+
+  color: #707070;
+  font-size: 9px;
+  line-height: 1.5;
+}
+
+.tournament-not-found {
+  margin-top: 100px;
+  text-align: center;
+}
+
+.tournament-not-found div {
+  font-size: 45px;
+  margin-bottom: 15px;
+}
+
+.tournament-not-found h1 {
+  margin: 0 0 8px;
+  font-size: 22px;
+}
+
+.tournament-not-found p {
+  color: #777777;
+  font-size: 11px;
+}
+
+@media (max-width: 600px) {
+  .tournament-page {
+    padding:
+      calc(env(safe-area-inset-top) + 14px)
+      10px
+      calc(env(safe-area-inset-bottom) + 125px);
+  }
+
+  .tournament-hero {
+    padding: 21px 15px;
+    border-radius: 17px;
+  }
+
+  .tournament-hero h1 {
+    font-size: 23px;
+  }
+
+  .tournament-section-card {
+    min-height: 64px;
+  }
+}

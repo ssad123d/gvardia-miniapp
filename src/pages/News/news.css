@@ -1,0 +1,129 @@
+/* ========================= NEWS PAGE ========================= */
+.news-page { min-height: 100vh; box-sizing: border-box;
+padding: 28px 16px 120px;
+background: radial-gradient( circle at 100% 0%, rgba(255, 212, 0, 0.08), transparent 30% ), #0d0e10;
+color: #ffffff; }
+/* ========================= HEADER ========================= */
+.news-header { margin-bottom: 24px; }
+.news-header h1 { margin: 0;
+font-size: 34px; line-height: 1;
+font-weight: 900; letter-spacing: -1px; }
+.news-header-team { margin-top: 9px;
+color: #ffd400;
+font-size: 14px; font-weight: 900; letter-spacing: 1px; }
+.news-header p { margin: 6px 0 0;
+color: #8f9297;
+font-size: 14px; font-weight: 500; }
+/* ========================= NEWS LIST ========================= */
+.news-list { display: flex; flex-direction: column; gap: 14px; }
+/* ========================= NEWS CARD ========================= */
+.news-card { position: relative;
+display: flex; align-items: stretch;
+min-height: 175px;
+overflow: hidden;
+background: linear-gradient( 145deg, #1d1f22, #131517 );
+border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px;
+box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); }
+/* Золотая полоска */
+.news-card::before { content: "";
+position: absolute;
+left: 0; top: 0; bottom: 0;
+width: 4px;
+background: #ffd400;
+z-index: 3; }
+/* ========================= IMAGE ========================= */
+.news-image { flex: 0 0 34%;
+min-height: 175px;
+padding: 9px 0 9px 9px;
+box-sizing: border-box; }
+.news-image-placeholder { width: 100%; height: 100%;
+min-height: 157px;
+display: flex; align-items: center; justify-content: center;
+overflow: hidden;
+border-radius: 14px;
+background: linear-gradient( 145deg, #24272b, #0c0d0f );
+border: 1px solid rgba(255, 212, 0, 0.15);
+position: relative; }
+/* декоративное свечение */
+.news-image-placeholder::before { content: "";
+position: absolute;
+width: 100px; height: 100px;
+border-radius: 50%;
+background: rgba(255, 212, 0, 0.08);
+top: -35px; right: -35px; }
+/* буква G */
+.news-image-placeholder span { position: relative; z-index: 1;
+color: #ffd400;
+font-size: 46px; font-weight: 900;
+font-style: italic;
+text-shadow: 0 0 20px rgba(255, 212, 0, 0.25); }
+/* ========================= CARD CONTENT ========================= */
+.news-card-content { position: relative; z-index: 2;
+flex: 1;
+min-width: 0;
+padding: 18px 42px 17px 17px;
+display: flex; flex-direction: column; justify-content: center; }
+/* ========================= DATE ========================= */
+.news-date { margin-bottom: 7px;
+color: #ffd400;
+font-size: 10px; line-height: 1;
+font-weight: 900;
+letter-spacing: 0.6px; }
+/* ========================= TITLE ========================= */
+.news-card h2 { margin: 0 0 7px;
+color: #ffffff;
+font-size: 17px; line-height: 1.2;
+font-weight: 900;
+letter-spacing: -0.2px; }
+/* ========================= PREVIEW ========================= */
+.news-card p { margin: 0;
+color: #a4a7ac;
+font-size: 12px; line-height: 1.4;
+font-weight: 500; }
+/* ========================= READ MORE ========================= */
+.news-more { align-self: flex-start;
+display: inline-flex; align-items: center; gap: 8px;
+margin-top: 12px; padding: 8px 12px;
+border: 1px solid #ffd400; border-radius: 9px;
+background: transparent;
+color: #ffd400;
+font-size: 11px;
+font-weight: 900;
+cursor: pointer;
+transition: background 0.2s ease, transform 0.2s ease; }
+.news-more:hover { background: rgba(255, 212, 0, 0.1); }
+.news-more:active { transform: scale(0.96); }
+.news-arrow { font-size: 15px; line-height: 1; }
+/* ========================= BIG ARROW ========================= */
+.news-card-arrow { position: absolute;
+right: 12px; top: 50%;
+transform: translateY(-50%);
+width: 28px; height: 28px;
+display: flex; align-items: center; justify-content: center;
+padding: 0;
+border: none;
+background: transparent;
+color: rgba(255, 255, 255, 0.65);
+font-size: 25px; font-weight: 300;
+cursor: pointer; }
+/* ========================= MOBILE ========================= */
+@media (max-width: 480px) { .news-page { padding: 24px 12px 115px; }
+.news-header h1 { font-size: 31px; }
+.news-card { min-height: 155px;border-radius: 17px;}
+.news-image { flex-basis: 32%;
+min-height: 155px;
+
+padding: 8px 0 8px 8px;}
+.news-image-placeholder { min-height: 139px;
+border-radius: 12px;}
+.news-image-placeholder span { font-size: 38px; }
+.news-card-content { padding: 14px 35px 14px 13px; }
+.news-date { font-size: 9px; }
+.news-card h2 { font-size: 15px; }
+.news-card p { font-size: 11px; }
+.news-more { margin-top: 9px;
+padding: 7px 10px;
+
+font-size: 10px;}
+.news-card-arrow { right: 7px;
+font-size: 21px;} }

@@ -1,0 +1,470 @@
+.archive-matches-page {
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 18px 14px 125px;
+
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(255, 210, 28, 0.1),
+      transparent 35%
+    ),
+    #090909;
+
+  color: #ffffff;
+}
+
+.archive-matches-back {
+  border: none;
+  background: transparent;
+
+  color: #ffd21c;
+
+  font-size: 12px;
+  font-weight: 800;
+
+  padding: 4px 0;
+
+  cursor: pointer;
+}
+
+.archive-matches-header {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.archive-matches-header > span {
+  color: #ffd21c;
+
+  font-size: 9px;
+  font-weight: 900;
+
+  letter-spacing: 1.5px;
+}
+
+.archive-matches-header h1 {
+  margin: 7px 0 5px;
+
+  color: #ffffff;
+
+  font-size: 28px;
+  font-weight: 900;
+
+  letter-spacing: -0.7px;
+}
+
+.archive-matches-header p {
+  margin: 0;
+
+  color: #777777;
+
+  font-size: 10px;
+}
+
+.archive-matches-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+
+  margin-top: 22px;
+
+  border: 1px solid #292929;
+  border-radius: 16px;
+
+  background: #141414;
+
+  overflow: hidden;
+}
+
+.archive-matches-summary div {
+  min-height: 70px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  border-right: 1px solid #292929;
+}
+
+.archive-matches-summary div:last-child {
+  border-right: none;
+}
+
+.archive-matches-summary strong {
+  color: #ffd21c;
+
+  font-size: 20px;
+  font-weight: 900;
+}
+
+.archive-matches-summary span {
+  margin-top: 4px;
+
+  color: #777777;
+
+  font-size: 8px;
+  font-weight: 800;
+
+  text-transform: uppercase;
+}
+
+.archive-matches-list {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+
+  margin-top: 18px;
+}
+
+.archive-match-card {
+  position: relative;
+
+  width: 100%;
+
+  padding: 0;
+
+  display: grid;
+  grid-template-columns: 62px minmax(0, 1fr);
+
+  border: 1px solid #292929;
+  border-radius: 17px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #181818 0%,
+      #111111 60%,
+      #0d0d0d 100%
+    );
+
+  color: #ffffff;
+
+  text-align: left;
+
+  overflow: hidden;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.archive-match-card:hover {
+  border-color: rgba(255, 210, 28, 0.5);
+
+  transform: translateY(-2px);
+}
+
+.archive-match-card:active {
+  transform: scale(0.985);
+}
+
+.archive-match-date {
+  min-height: 145px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  border-right: 1px solid #292929;
+
+  background: rgba(255, 210, 28, 0.03);
+}
+
+.archive-match-date strong {
+  color: #ffd21c;
+
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.archive-match-date span {
+  margin-top: 4px;
+
+  color: #666666;
+
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.archive-match-content {
+  min-width: 0;
+
+  padding: 14px 16px 13px;
+}
+
+.archive-match-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 8px;
+
+  margin-bottom: 13px;
+}
+
+.archive-match-top > span {
+  color: #666666;
+
+  font-size: 8px;
+  font-weight: 900;
+
+  letter-spacing: 0.8px;
+}
+
+.archive-match-top b {
+  padding: 5px 8px;
+
+  border-radius: 7px;
+
+  font-size: 8px;
+  font-weight: 900;
+}
+
+.archive-match-top b.win {
+  background: rgba(255, 210, 28, 0.12);
+
+  border: 1px solid rgba(255, 210, 28, 0.35);
+
+  color: #ffd21c;
+}
+
+.archive-match-top b.loss {
+  background: #202020;
+
+  border: 1px solid #353535;
+
+  color: #888888;
+}
+
+.archive-match-teams {
+  display: grid;
+
+  grid-template-columns:
+    minmax(65px, 1fr)
+    62px
+    minmax(65px, 1fr);
+
+  align-items: center;
+
+  gap: 7px;
+}
+
+.archive-match-team {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+}
+
+.archive-team-logo {
+  width: 39px;
+  height: 39px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 7px;
+
+  border-radius: 50%;
+
+  background: #252525;
+
+  border: 1px solid #3b3b3b;
+
+  overflow: hidden;
+}
+
+.archive-team-logo img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+}
+
+.archive-team-logo.gvardiya-logo {
+  background: #ffd21c;
+  border-color: #ffd21c;
+}
+
+.archive-match-team span {
+  max-width: 100%;
+
+  color: #dddddd;
+
+  font-size: 8px;
+  font-weight: 900;
+
+  line-height: 1.2;
+
+  overflow-wrap: anywhere;
+}
+
+.archive-match-team:first-child span {
+  color: #ffd21c;
+}
+
+.archive-match-score {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+}
+
+.archive-match-score strong {
+  color: #ffffff;
+
+  font-size: 21px;
+  font-weight: 900;
+
+  white-space: nowrap;
+}
+
+.archive-match-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 8px;
+
+  margin-top: 13px;
+  padding-top: 10px;
+
+  border-top: 1px solid #292929;
+}
+
+.archive-match-footer span {
+  color: #666666;
+
+  font-size: 8px;
+  font-weight: 700;
+}
+
+.archive-match-footer strong {
+  color: #ffd21c;
+
+  font-size: 8px;
+  font-weight: 900;
+}
+
+.archive-matches-note {
+  display: flex;
+  gap: 10px;
+
+  margin-top: 15px;
+  padding: 13px;
+
+  border: 1px solid #252525;
+  border-radius: 14px;
+
+  background: #111111;
+}
+
+.archive-matches-note-icon {
+  width: 28px;
+  height: 28px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: rgba(255, 210, 28, 0.12);
+
+  color: #ffd21c;
+
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.archive-matches-note strong {
+  display: block;
+
+  margin-bottom: 4px;
+
+  color: #dddddd;
+
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.archive-matches-note p {
+  margin: 0;
+
+  color: #707070;
+
+  font-size: 9px;
+  line-height: 1.5;
+}
+
+@media (max-width: 600px) {
+  .archive-matches-page {
+    padding:
+      calc(env(safe-area-inset-top) + 14px)
+      10px
+      calc(env(safe-area-inset-bottom) + 125px);
+  }
+
+  .archive-matches-header h1 {
+    font-size: 25px;
+  }
+
+  .archive-matches-summary div {
+    min-height: 64px;
+  }
+
+  .archive-match-card {
+    grid-template-columns: 55px minmax(0, 1fr);
+  }
+
+  .archive-match-date {
+    min-height: 138px;
+  }
+
+  .archive-match-date strong {
+    font-size: 13px;
+  }
+
+  .archive-match-content {
+    padding: 12px 11px;
+  }
+
+  .archive-match-teams {
+    grid-template-columns:
+      minmax(55px, 1fr)
+      58px
+      minmax(55px, 1fr);
+
+    gap: 4px;
+  }
+
+  .archive-team-logo {
+    width: 35px;
+    height: 35px;
+  }
+
+  .archive-match-score strong {
+    font-size: 18px;
+  }
+
+  .archive-match-team span {
+    font-size: 7px;
+  }
+
+  .archive-match-footer span {
+    font-size: 7px;
+  }
+}

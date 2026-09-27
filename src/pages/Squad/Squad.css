@@ -1,0 +1,324 @@
+.squad-page {
+  min-height: 100vh;
+  padding: 24px 16px 110px;
+  box-sizing: border-box;
+  color: #ffffff;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.squad-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+}
+
+.squad-header h1 {
+  margin: 0;
+  font-size: 27px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.squad-header p {
+  margin: 6px 0 0;
+  color: #ffd400;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.squad-total {
+  min-width: 62px;
+  padding: 9px 12px;
+
+  border: 1px solid #3d4146;
+  border-radius: 14px;
+
+  background: #292d32;
+
+  text-align: center;
+}
+
+.squad-total strong {
+  display: block;
+
+  color: #ffd400;
+
+  font-size: 21px;
+  line-height: 1;
+}
+
+.squad-total span {
+  display: block;
+
+  margin-top: 4px;
+
+  color: #9d9d9d;
+
+  font-size: 11px;
+}
+
+/* =========================
+   SECTIONS
+========================= */
+
+.squad-content {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.position-section {
+  position: relative;
+}
+
+/* разделитель между позициями */
+
+.position-section:not(:first-child)::before {
+  content: "";
+
+  display: block;
+
+  height: 1px;
+
+  margin-bottom: 28px;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #ffd400,
+    transparent
+  );
+
+  opacity: 0.45;
+}
+
+/* =========================
+   POSITION HEADER
+========================= */
+
+.position-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 13px;
+}
+
+.position-title {
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+}
+
+.position-icon {
+  width: 34px;
+  height: 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: 10px;
+
+  background: #ffd400;
+
+  font-size: 17px;
+}
+
+.position-title h2 {
+  margin: 0;
+
+  font-size: 19px;
+  font-weight: 800;
+}
+
+.player-count {
+  color: #999999;
+
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* =========================
+   PLAYERS
+========================= */
+
+.players-list {
+  display: flex;
+  flex-direction: column;
+
+  gap: 9px;
+}
+
+.player-card {
+  display: flex;
+  align-items: center;
+
+  min-height: 67px;
+
+  padding: 9px 12px;
+
+  box-sizing: border-box;
+
+  background: #292d32;
+
+  border: 1px solid #3b3f44;
+
+  border-radius: 15px;
+
+  transition: transform 0.15s ease;
+}
+
+.player-card:active {
+  transform: scale(0.98);
+}
+
+/* =========================
+   NUMBER
+========================= */
+
+.player-number {
+  width: 29px;
+
+  margin-right: 10px;
+
+  flex-shrink: 0;
+
+  color: #777777;
+
+  font-size: 12px;
+  font-weight: 800;
+
+  text-align: center;
+}
+
+/* =========================
+   AVATAR
+========================= */
+
+.player-avatar {
+  width: 43px;
+  height: 43px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background: #1c1f22;
+
+  border: 1px solid #4a4e53;
+
+  color: #ffd400;
+
+  font-size: 17px;
+  font-weight: 800;
+}
+
+/* =========================
+   PLAYER INFO
+========================= */
+
+.player-info {
+  min-width: 0;
+
+  margin-left: 10px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.player-name {
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+
+  color: #ffffff;
+
+  font-size: 16px;
+  font-weight: 750;
+
+  line-height: 1.2;
+
+  text-align: left;
+}
+
+.player-position {
+  margin-top: 2px;
+
+  color: #8f9398;
+
+  font-size: 12px;
+
+  line-height: 1.2;
+
+  text-align: left;
+}
+
+/* =========================
+   ARROW
+========================= */
+
+.player-arrow {
+  margin-left: auto;
+
+  padding-left: 10px;
+
+  color: #777777;
+
+  font-size: 25px;
+
+  line-height: 1;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 380px) {
+  .squad-page {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .squad-header h1 {
+    font-size: 24px;
+  }
+
+  .player-card {
+    padding-left: 9px;
+    padding-right: 9px;
+  }
+
+  .player-number {
+    width: 25px;
+    margin-right: 7px;
+  }
+
+  .player-avatar {
+    width: 40px;
+    height: 40px;
+  }
+
+  .player-info {
+    margin-left: 8px;
+  }
+
+  .player-name {
+    font-size: 15px;
+  }
+}

@@ -1,0 +1,477 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+  height: auto;
+}
+
+body {
+  margin: 0;
+  background: #0f1013;
+  color: white;
+  font-family: Inter, sans-serif;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.app {
+  min-height: 100vh;
+  padding-bottom: 100px;
+}
+
+.app {
+  min-height: 100vh;
+}
+
+.content {
+  padding: 20px;
+}
+
+.welcome {
+  margin-top: 20px;
+}
+
+.welcome h2 {
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+.welcome p {
+  color: #9d9d9d;
+  line-height: 1.5;
+}
+
+.next-match {
+  margin-top: 40px;
+}
+
+.next-match h3 {
+  margin-bottom: 15px;
+}
+
+.match-placeholder {
+  background: #1b1d22;
+  border: 2px dashed #d4af37;
+  border-radius: 18px;
+  padding: 40px 20px;
+  text-align: center;
+  color: #d4af37;
+}
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  height: 82px;
+  background: #0b0b0b;
+  border-top: 1px solid #292929;
+
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  z-index: 1000;
+}
+.matches-page {
+  width: 100%;
+  min-height: 100vh;
+  padding: 20px 20px 140px;
+}
+
+.bottom-nav a {
+  flex: 1;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 5px;
+
+  color: #777;
+  text-decoration: none;
+  font-size: 11px;
+}
+
+.bottom-nav a span {
+  font-size: 11px;
+}
+
+.bottom-nav a.active {
+  color: #d4af37;
+}
+
+.bottom-nav a:first-child {
+  color: #777;
+}
+
+.bottom-nav a.active:first-child {
+  color: #d4af37;
+  }
+.schedule-card {
+  background: #111;
+  border: 2px solid #d4af37;
+  border-radius: 16px;
+  padding: 20px;
+  margin: 20px 0;
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+}
+
+.schedule-date {
+  color: #d4af37;
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.schedule-title {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.schedule-teams {
+  font-size: 24px;
+  text-align: center;
+  margin: 15px 0;
+}
+
+.schedule-vs {
+  color: #d4af37;
+  margin: 10px 0;
+}
+
+.schedule-time {
+  font-size: 20px;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.schedule-place {
+  color: #ccc;
+  margin-top: 10px;
+  text-align: center;
+}/* Чтобы контент не прятался за нижней навигацией */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 82px;
+  z-index: 1000;
+}
+
+/* Свободное место под нижнее меню */
+.matches-page {
+  padding-bottom: 150px;
+}/* =========================
+   РАСПИСАНИЕ
+========================= */
+
+.schedule-page {
+  width: 100%;
+  min-height: 100vh;
+  padding: 20px 20px 150px;
+  text-align: center;
+}
+
+.schedule-page h1 {
+  margin-bottom: 5px;
+}
+
+.schedule-subtitle {
+  color: #bdbdbd;
+  font-size: 16px;
+  margin-bottom: 25px;
+}
+
+.schedule-list {
+  width: 100%;
+  max-width: 850px;
+  margin: 0 auto;
+}
+
+.schedule-card {
+  background: #17191e;
+  border: 2px solid #d4af37;
+  border-radius: 18px;
+  padding: 24px 20px;
+  margin-bottom: 18px;
+  box-shadow: 0 0 18px rgba(212, 175, 55, 0.18);
+}
+
+.schedule-date {
+  color: #d4af37;
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 7px;
+}
+
+.schedule-tournament {
+  color: #eeeeee;
+  font-size: 15px;
+  margin-bottom: 14px;
+}
+
+.schedule-status {
+  color: #ffffff;
+  font-size: 17px;
+  font-weight: 800;
+  margin-bottom: 20px;
+}
+
+.schedule-match {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 35px;
+  margin-bottom: 20px;
+}
+
+.schedule-team {
+  width: 130px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.schedule-team img {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  border-radius: 12px;
+}
+
+.schedule-team span {
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.schedule-score,
+.schedule-vs {
+  color: #d4af37;
+  font-size: 34px;
+  font-weight: 900;
+  min-width: 100px;
+}
+
+.schedule-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: #eeeeee;
+  font-size: 16px;
+}
+
+@media (max-width: 600px) {
+  .schedule-page {
+    padding: 15px 12px 140px;
+  }
+
+  .schedule-card {
+    padding: 20px 10px;
+  }
+
+  .schedule-match {
+    gap: 8px;
+  }
+
+  .schedule-team {
+    width: 105px;
+  }
+
+  .schedule-team img {
+    width: 62px;
+    height: 62px;
+  }
+
+  .schedule-team span {
+    font-size: 13px;
+  }
+
+  .schedule-score,
+  .schedule-vs {
+    font-size: 28px;
+    min-width: 65px;
+  }
+}/* =========================
+   ТУРНИРНАЯ ТАБЛИЦА
+========================= */
+
+.table-page {
+  width: 100%;
+  min-height: 100vh;
+  padding: 20px 12px 220px;
+  text-align: center;
+}
+
+.table-page h1 {
+  margin-bottom: 5px;
+}
+
+.table-subtitle {
+  color: #d4af37;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 25px;
+}
+
+.table-wrapper {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  background: #17191e;
+  border: 2px solid #d4af37;
+  border-radius: 18px;
+  overflow-x: auto;
+  box-shadow: 0 0 18px rgba(212, 175, 55, 0.18);
+}
+
+.table-header,
+.table-row {
+  min-width: 650px;
+  display: grid;
+  grid-template-columns: 45px minmax(180px, 1fr) 55px 55px 55px 55px 90px 55px;
+  align-items: center;
+}
+
+.table-header {
+  min-height: 55px;
+  background: #0f1013;
+  color: #d4af37;
+  font-size: 13px;
+  font-weight: 800;
+  border-bottom: 1px solid #3b3b3b;
+}
+
+.table-row {
+  min-height: 65px;
+  color: #ffffff;
+  font-size: 14px;
+  border-bottom: 1px solid #2b2d32;
+}
+
+.table-row:last-child {
+  border-bottom: none;
+}
+
+.team-column {
+  text-align: left;
+  padding-left: 15px;
+}
+
+.team-name {
+  font-weight: 800;
+}
+
+.table-place {
+  color: #bdbdbd;
+  font-weight: 700;
+}
+
+.points {
+  color: #d4af37;
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.gvardiya-row {
+  background: rgba(212, 175, 55, 0.12);
+  box-shadow: inset 4px 0 0 #d4af37;
+}
+
+.gvardiya-row .team-name {
+  color: #d4af37;
+}
+
+.table-legend {
+  width: 100%;
+  max-width: 900px;
+  margin: 18px auto 0;
+  padding: 15px;
+  color: #888;
+  font-size: 12px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.table-legend b {
+  color: #d4af37;
+}
+
+@media (max-width: 600px) {
+  .table-page {
+    padding: 15px 8px 220px;
+  }
+
+  .table-wrapper {
+    border-radius: 14px;
+  }
+
+  .table-header,
+  .table-row {
+    min-width: 600px;
+    grid-template-columns: 40px minmax(160px, 1fr) 45px 45px 45px 45px 80px 45px;
+  }
+
+  .table-header {
+    font-size: 12px;
+  }
+
+  .table-row {
+    min-height: 60px;
+    font-size: 13px;
+  }
+
+  .team-column {
+    padding-left: 10px;
+  }
+}.team-logo {
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-right: 10px;
+}
+
+.team-logo img {
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+  border-radius: 50%;
+}
+
+.team-logo-placeholder {
+  width: 38px;
+  height: 38px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+  background: #1b1d22;
+  color: #d4af37;
+  font-weight: bold;
+}.table-row .team-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}

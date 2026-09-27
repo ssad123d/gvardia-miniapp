@@ -1,0 +1,38 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px;
+}
+
+.logo {
+  width: 72px;
+  height: 72px;
+  border: 3px solid #d4af37;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #d4af37;
+  font-size: 34px;
+  font-weight: bold;
+}
+
+.title span {
+  color: #8d8d8d;
+  font-size: 13px;
+  letter-spacing: 4px;
+}
+
+.title h1 {
+  margin: 4px 0 0;
+  color: white;
+  font-size: 48px;
+  font-weight: 800;
+}
+
+.season {
+  color: #d4af37;
+  font-size: 42px;
+  font-weight: bold;
+}

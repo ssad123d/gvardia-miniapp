@@ -1,0 +1,113 @@
+/* ========================= NEWS ARTICLE PAGE ========================= */
+.news-article-page { min-height: 100vh; box-sizing: border-box;
+padding: 20px 16px 40px;
+background: radial-gradient( circle at 100% 0%, rgba(255, 212, 0, 0.08), transparent 32% ), #0d0e10;
+color: #ffffff; }
+/* ========================= HEADER ========================= */
+.news-article-header { display: flex; align-items: center; justify-content: space-between;
+margin-bottom: 20px; }
+.news-article-brand { color: #ffd400;
+font-size: 11px; font-weight: 900;
+letter-spacing: 1px; }
+/* ========================= BACK BUTTON ========================= */
+.news-back-button { display: inline-flex; align-items: center; gap: 7px;
+padding: 8px 12px;
+border: 1px solid rgba(255, 212, 0, 0.35); border-radius: 9px;
+background: rgba(255, 212, 0, 0.06);
+color: #ffd400;
+font-size: 12px; font-weight: 800;
+cursor: pointer;
+transition: background 0.2s ease, transform 0.2s ease; }
+.news-back-button span { font-size: 17px; line-height: 1; }
+.news-back-button:active { transform: scale(0.96); background: rgba(255, 212, 0, 0.12); }
+/* ========================= ARTICLE IMAGE ========================= */
+.news-article-image { width: 100%; height: 210px;
+margin-bottom: 22px;
+overflow: hidden;
+border-radius: 20px;
+border: 1px solid rgba(255, 212, 0, 0.15);
+background: #17191c; }
+.news-article-image-placeholder { width: 100%; height: 100%;
+display: flex; align-items: center; justify-content: center;
+position: relative;
+overflow: hidden;
+background: radial-gradient( circle at center, rgba(255, 212, 0, 0.14), transparent 45% ), linear-gradient( 145deg, #25282c, #0a0b0d ); }
+.news-article-image-placeholder::before { content: "";
+position: absolute;
+width: 190px; height: 190px;
+border-radius: 50%;
+border: 1px solid rgba(255, 212, 0, 0.12);
+box-shadow: 0 0 60px rgba(255, 212, 0, 0.08); }
+.news-article-image-placeholder::after { content: "ФК «ГВАРДИЯ»";
+position: absolute;
+bottom: 14px; left: 16px;
+color: rgba(255, 255, 255, 0.35);
+font-size: 9px; font-weight: 900;
+letter-spacing: 1.5px; }
+.news-article-image-placeholder span { position: relative; z-index: 2;
+color: #ffd400;
+font-size: 74px; line-height: 1;
+font-weight: 900;
+font-style: italic;
+text-shadow: 0 0 30px rgba(255, 212, 0, 0.2); }
+/* ========================= ARTICLE ========================= */
+.news-article { padding: 0 2px; }
+/* ========================= DATE ========================= */
+.news-article-date { margin-bottom: 10px;
+color: #ffd400;
+font-size: 11px; font-weight: 900;
+letter-spacing: 0.8px; }
+/* ========================= TITLE ========================= */
+.news-article h1 { margin: 0;
+color: #ffffff;
+font-size: 28px; line-height: 1.14;
+font-weight: 900;
+letter-spacing: -0.7px; }
+/* ========================= GOLD LINE ========================= */
+.news-article-line { width: 48px; height: 3px;
+margin: 18px 0 20px;
+border-radius: 3px;
+background: #ffd400; }
+/* ========================= TEXT ========================= */
+.news-article-text { max-width: 700px; }
+.news-article-text p { margin: 0 0 18px;
+color: #b7bbc1;
+font-size: 15px; line-height: 1.65;
+font-weight: 500; }
+.news-article-text p:last-child { margin-bottom: 0; }
+/* ========================= BOTTOM BACK BUTTON ========================= */
+.news-bottom-back { width: 100%;
+display: flex; align-items: center; justify-content: center; gap: 9px;
+margin-top: 30px; padding: 13px 16px;
+border: 1px solid rgba(255, 212, 0, 0.35); border-radius: 12px;
+background: rgba(255, 212, 0, 0.05);
+color: #ffd400;
+font-size: 13px; font-weight: 900;
+cursor: pointer;
+transition: background 0.2s ease, transform 0.2s ease; }
+.news-bottom-back span { font-size: 17px; }
+.news-bottom-back:active { transform: scale(0.98);
+background: rgba(255, 212, 0, 0.1); }
+/* ========================= NOT FOUND ========================= */
+.news-not-found { min-height: 60vh;
+display: flex; flex-direction: column; align-items: center; justify-content: center;
+text-align: center; }
+.news-not-found-icon { width: 70px; height: 70px;
+display: flex; align-items: center; justify-content: center;margin-bottom: 18px;
+border: 2px solid #ffd400; border-radius: 50%;
+color: #ffd400;
+font-size: 34px; font-weight: 900;
+font-style: italic; }
+.news-not-found h1 { margin: 0 0 8px;
+font-size: 22px; font-weight: 900; }
+.news-not-found p { max-width: 280px;
+margin: 0;
+color: #8f9297;
+font-size: 13px; line-height: 1.5; }
+/* ========================= MOBILE ========================= */
+@media (max-width: 480px) { .news-article-page { padding: 18px 14px 35px; }
+.news-article-image { height: 190px;
+border-radius: 18px;}
+.news-article-image-placeholder span { font-size: 64px; }
+.news-article h1 { font-size: 25px; }
+.news-article-text p { font-size: 14px; line-height: 1.6; } }

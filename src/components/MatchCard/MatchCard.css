@@ -1,0 +1,138 @@
+.match-card {
+  background: #1b1d22;
+  border: 1px solid #3a3d44;
+  border-radius: 22px;
+  padding: 24px 18px;
+  margin: 16px auto;
+  max-width: 650px;
+  box-sizing: border-box;
+}
+
+/* Турнир */
+.league {
+  text-align: center;
+  color: #a8a8a8;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+
+/* Команды */
+.teams {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 35px;
+  margin: 28px 0;
+}
+
+/* Команда */
+.team {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 120px;
+  text-align: center;
+}
+
+/* Эмблема */
+.badge {
+  width: 86px;
+  height: 86px;
+  border-radius: 50%;
+  background: #292c32;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 10px;
+
+  box-shadow: 0 0 18px rgba(212, 175, 55, 0.18);
+}
+
+.badge img {
+  width: 68px;
+  height: 68px;
+  object-fit: contain;
+}
+
+/* Название команды */
+.team span {
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+/* VS */
+.score {
+  color: #f6c343;
+  font-size: 48px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+/* Информация */
+.info {
+  text-align: center;
+  color: #d0d0d0;
+  font-size: 16px;
+  line-height: 1.8;
+  margin-top: 20px;
+  font-weight: 600;
+}
+/* Кнопка */
+.match-button {
+  display: block;
+  width: 180px;
+  margin: 20px auto 0;
+  padding: 12px 20px;
+
+  border: none;
+  border-radius: 12px;
+
+  background: #d4af37;
+  color: #111111;
+
+  font-size: 15px;
+  font-weight: 700;
+
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.match-button:hover {
+  opacity: 0.9;
+}
+
+.match-button:active {
+  transform: scale(0.98);
+}
+
+/* Подробности */
+.match-details {
+  margin-top: 14px;
+  padding: 12px 16px;
+
+  background: #24272d;
+  border: 1px solid #363940;
+  border-radius: 14px;
+
+  color: #d6d6d6;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.match-details p {
+  margin: 3px 0;
+}
+
+.match-details p {
+  margin: 5px 0;
+}.matches-page {
+  padding-bottom: 120px;
+}
+
+body {
+  overflow-y: auto;
+}
