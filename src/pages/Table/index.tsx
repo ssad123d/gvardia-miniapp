@@ -1,60 +1,15 @@
-import { useEffect, useState } from "react"; import { getTable } from "../../services/tournamentApi"; import type { TeamTableRow } from "../../services/tournamentApi";
-import gvardiyaLogo from "../../assets/gvardiya.JPG"; import mfkLogo from "../../assets/mfk-simferopol.png"; import nazvanieLogo from "../../assets/nazvanie.png"; import interLogo from "../../assets/inter.png"; import selhozLogo from "../../assets/selhoz.png"; import duoLogo from "../../assets/duo.png"; import arsOilLogo from "../../assets/ars-oil.png"; import nomadLogo from "../../assets/nomad.png"; import superGeroiLogo from "../../assets/super-geroi.png"; import moguchayaKuchkaLogo from "../../assets/moguchaya-kuchka.png"; import rkSportLogo from "../../assets/rk-sport.png"; import ribizaLogo from "../../assets/ribiza.png";
-import Playoff from "../Playoff";
-const teamLogos: Record<string, string> = { "Сельхоз Юнайтед": selhozLogo, "DUO": duoLogo, "ARS OIL": arsOilLogo, "Nomad": nomadLogo, "Супер Герои": superGeroiLogo, "Могучая кучка | Buddies & Co.": moguchayaKuchkaLogo, "РК-Спорт": rkSportLogo, "МФК Симферополь": mfkLogo, "RIBIZA": ribizaLogo, "Интер-Национал": interLogo, "Гвардия": gvardiyaLogo, "Название": nazvanieLogo, };
-function Table() { const [activeTab, setActiveTab] = useState<"table" | "playoff">("table");
-const [teams, setTeams] = useState<TeamTableRow[]>([]);
-useEffect(() => { getTable().then(setTeams); }, []);
-if (activeTab === "playoff") { return ( <div> <div className="table-tabs">
-      <button
-        onClick={() => setActiveTab("table")}
-      >
-        🏆 Групповой этап
-      </button>
-
-      <button
-        className="active"
-        onClick={() => setActiveTab("playoff")}
-      >
-        ⚔️ Плей-офф
-      </button>
-
-    </div>
-
-    <Playoff />
-  </div>
-);}
-return ( <div className="table-page">
-  <h1>ТАБЛИЦА</h1>
-
+import gvardiyaLogo from "../../assets/gvardiya.jpg"; import interLogo from "../../assets/inter.png"; import selhozLogo from "../../assets/selhoz.png"; import duoLogo from "../../assets/duo.png"; import arsOilLogo from "../../assets/ars-oil.png"; import nomadLogo from "../../assets/nomad.png"; import superGeroiLogo from "../../assets/super-geroi.png"; import moguchayaKuchkaLogo from "../../assets/moguchaya-kuchka.png"; import rkSportLogo from "../../assets/rk-sport.png";
+type Team = { name: string; logo: string | null; games: number; wins: number; draws: number; losses: number; points: number; };
+const teams: Team[] = [ { name: "Сельхоз Юнайтед", logo: selhozLogo, games: 8, wins: 6, draws: 2, losses: 0, points: 20, }, { name: "DUO", logo: duoLogo, games: 8, wins: 6, draws: 2, losses: 0, points: 20, }, { name: "ARS OIL", logo: arsOilLogo, games: 8, wins: 5, draws: 0, losses: 3, points: 15, }, { name: "Nomad", logo: nomadLogo, games: 8, wins: 5, draws: 0, losses: 3, points: 15, }, { name: "Супер Герои", logo: superGeroiLogo, games: 8, wins: 4, draws: 2, losses: 2, points: 14, }, { name: "Могучая кучка | Buddies ...", logo: moguchayaKuchkaLogo, games: 8, wins: 4, draws: 0, losses: 4, points: 12, }, { name: "РК-Спорт", logo: rkSportLogo, games: 8, wins: 3, draws: 1, losses: 4, points: 10, }, { name: "МФК Симферополь", logo: null, games: 8, wins: 3, draws: 0, losses: 5, points: 9, }, { name: "RIBIZA", logo: null, games: 8, wins: 2, draws: 1, losses: 5, points: 7, }, { name: "Интер-Национал", logo: interLogo, games: 8, wins: 2, draws: 1, losses: 5, points: 7, }, { name: "Гвардия", logo: gvardiyaLogo, games: 8, wins: 2, draws: 0, losses: 6, points: 6, }, { name: "Название", logo: null, games: 8, wins: 1, draws: 1, losses: 6, points: 4, }, ];
+function Table() { return ( <div className="table-page"> <h1>ТАБЛИЦА</h1>
   <p className="table-subtitle">
     Кубок КСЛ
   </p>
 
-  <div className="table-tabs">
-
-    <button
-      className="active"
-      onClick={() => setActiveTab("table")}
-    >
-      🏆 Групповой этап
-    </button>
-
-    <button
-      onClick={() => setActiveTab("playoff")}
-    >
-      ⚔️ Плей-офф
-    </button>
-
-  </div>
-
   <div className="table-wrapper">
 
     <div className="table-header">
-
-      <div className="position">
-        #
-      </div>
+      <div className="position">#</div>
 
       <div className="team-name">
         КОМАНДА
@@ -65,11 +20,9 @@ return ( <div className="table-page">
       <div>Н</div>
       <div>П</div>
       <div>О</div>
-
     </div>
 
-    {teams.map((team) => (
-
+    {teams.map((team, index) => (
       <div
         className={`table-row ${
           team.name === "Гвардия"
@@ -80,18 +33,15 @@ return ( <div className="table-page">
       >
 
         <div className="position">
-          {team.position}
+          {index + 1}
         </div>
 
         <div className="team-name">
 
           <div className="team-logo">
 
-            {teamLogos[team.name] ? (
-              <img
-                src={teamLogos[team.name]}
-                alt={team.name}
-              />
+            {team.logo ? (
+              <img src={team.logo ?? undefined} alt={team.name} />
             ) : (
               <div className="team-logo-placeholder">
                 {team.name.charAt(0)}
@@ -101,16 +51,13 @@ return ( <div className="table-page">
           </div>
 
           <strong>
-            {team.name ===
-            "Могучая кучка | Buddies & Co."
-              ? "Могучая кучка | Buddies ..."
-              : team.name}
+            {team.name}
           </strong>
 
         </div>
 
         <div>
-          {team.played}
+          {team.games}
         </div>
 
         <div>
@@ -130,7 +77,6 @@ return ( <div className="table-page">
         </div>
 
       </div>
-
     ))}
 
   </div>
