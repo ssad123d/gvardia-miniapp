@@ -7,7 +7,7 @@ import {
   getTeamDisplayName,
   getTeamLogo,
 } from "../../utils/teamLogos";
-import "./Matches.css";
+import "./matches.css";
 
 type MatchFilter = "all" | "upcoming" | "finished";
 
