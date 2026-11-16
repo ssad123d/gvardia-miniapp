@@ -1,5 +1,5 @@
 import "./MatchCard.css";
-import guardiyaLogo from "../../assets/gvardiya.jpg";
+import guardiyaLogo from "../../assets/gvardiya.png";
 import interLogo from "../../assets/inter.png";
 export default function MatchCard() {
   return (

@@ -1,91 +1,144 @@
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import "./matches.css";
 
-const matches = [
-  {
-    id: "1",
-    date: "20 СЕН",
-    time: "19:00",
-    opponent: "Могучая Кучка",
-    score: "—",
-    logo: "/src/assets/moguchaya-kuchka.png",
-    type: "upcoming",
-  },
-  {
-    id: "2",
-    date: "27 СЕН",
-    time: "18:30",
-    opponent: "Сельхоз Юнайтед",
-    score: "—",
-    logo: "/src/assets/selhoz.png",
-    type: "upcoming",
-  },
-  {
-    id: "3",
-    date: "30 АВГ",
-    time: "",
-    opponent: "Интер-Национал",
-    score: "5 : 6",
-    logo: "/src/assets/inter.png",
-    type: "finished",
-  },
-  {
-    id: "4",
-    date: "23 АВГ",
-    time: "",
-    opponent: "Название",
-    score: "7 : 4",
-    logo: "/src/assets/nazvanie.png",
-    type: "finished",
-  },
-];
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { getRKSportMatches } from "../../api/rksport";
+import type { RKSportMatch } from "../../api/rksport";
+import {
+  getTeamDisplayName,
+  getTeamLogo,
+} from "../../utils/teamLogos";
+import "./Matches.css";
 
-const gvardiyaLogo = "/src/assets/gvardiya.jpg";
+type MatchFilter = "all" | "upcoming" | "finished";
+
+const CACHE_KEY = "gvardia-matches-page-cache-v1";
+const RKSPORT_CACHE_KEY = "gvardia-rksport-cache-v1:matches";
+
+function TeamLogo({
+  teamName,
+  logo,
+}: {
+  teamName: string;
+  logo?: string;
+}) {
+  const [failed, setFailed] = useState(false);
+  const src = getTeamLogo(teamName, logo);
+
+  useEffect(() => {
+    setFailed(false);
+  }, [teamName, src]);
+
+  return (
+    <div className="team-logo">
+      {src && !failed ? (
+        <img
+          src={src}
+          alt={teamName}
+          onError={() => setFailed(true)}
+        />
+      ) : (
+        <span>⚽</span>
+      )}
+    </div>
+  );
+}
+
+function isFinished(match: RKSportMatch): boolean {
+  return Boolean(
+    match.score &&
+      /\d+\s*[-:]\s*\d+/.test(match.score)
+  );
+}
+
+function isGvardiyaMatch(match: RKSportMatch): boolean {
+  return (
+    match.homeTeam.toLowerCase().includes("гвард") ||
+    match.awayTeam.toLowerCase().includes("гвард")
+  );
+}
+
+function readPageCache(): RKSportMatch[] {
+  try {
+    const cached =
+      localStorage.getItem(CACHE_KEY) ||
+      localStorage.getItem(RKSPORT_CACHE_KEY);
+
+    if (!cached) return [];
+
+    const parsed = JSON.parse(cached);
+
+    if (!Array.isArray(parsed)) return [];
+
+    return parsed.filter(isGvardiyaMatch);
+  } catch (error) {
+    console.warn("Не удалось прочитать кэш матчей:", error);
+    return [];
+  }
+}
 
 export default function Matches() {
-  const navigate = useNavigate();
+  const [matches, setMatches] = useState<RKSportMatch[]>(
+    () => readPageCache()
+  );
 
-  const [filter, setFilter] = useState("all");
+  const [loading, setLoading] = useState(
+    () => readPageCache().length === 0
+  );
 
-  const visibleMatches = matches.filter((match) => {
-    if (filter === "upcoming") {
-      return match.type === "upcoming";
+  const [error, setError] = useState("");
+  const [filter, setFilter] = useState<MatchFilter>("all");
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function refreshMatches() {
+      try {
+        const result = await getRKSportMatches();
+
+        if (cancelled) return;
+
+        const gvardiyaMatches = result.filter(isGvardiyaMatch);
+
+        setMatches(gvardiyaMatches);
+        setError("");
+
+        localStorage.setItem(
+          CACHE_KEY,
+          JSON.stringify(gvardiyaMatches)
+        );
+      } catch (err) {
+        console.error("Ошибка фонового обновления матчей:", err);
+
+        if (!cancelled && matches.length === 0) {
+          setError(
+            "Не удалось загрузить матчи. Попробуйте обновить страницу."
+          );
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
     }
 
-    if (filter === "finished") {
-      return match.type === "finished";
-    }
+    refreshMatches();
 
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const filteredMatches = matches.filter((match) => {
+    if (filter === "upcoming") return !isFinished(match);
+    if (filter === "finished") return isFinished(match);
     return true;
   });
 
   return (
-    <main className="matches-page">
-
-      <header className="matches-header">
-
-        <div className="matches-header-logo">
-          G
-        </div>
-
-        <div>
-          <h1>ФК «ГВАРДИЯ»</h1>
-          <span>БОЛЬШЕ ЧЕМ КОМАНДА</span>
-        </div>
-
-        <button className="matches-notification">
-          🔔
-        </button>
-
-      </header>
-
-      <h2 className="matches-title">
-        Матчи
-      </h2>
+    <div className="matches-page">
+      <h1 className="matches-title">Матчи</h1>
 
       <div className="matches-tabs">
-
         <button
           className={filter === "all" ? "active" : ""}
           onClick={() => setFilter("all")}
@@ -97,95 +150,90 @@ export default function Matches() {
           className={filter === "upcoming" ? "active" : ""}
           onClick={() => setFilter("upcoming")}
         >
-          Ближайшие
+          Предстоящие
         </button>
 
         <button
           className={filter === "finished" ? "active" : ""}
           onClick={() => setFilter("finished")}
         >
-          Результаты
+          Завершённые
         </button>
-
       </div>
 
-      <section className="matches-list">
+      {loading && matches.length === 0 && (
+        <p>Загружаем матчи...</p>
+      )}
 
-        {visibleMatches.map((match) => (
+      {error && matches.length === 0 && (
+        <p className="matches-error">{error}</p>
+      )}
 
-          <button
-            key={match.id}
-            className="match-card"
-            onClick={() => navigate(`/matches/${match.id}`)}
-            type="button"
-          >
+      {!loading && filteredMatches.length === 0 && !error && (
+        <div className="matches-empty">
+          <div>⚽</div>
+          <h3>Матчей пока нет</h3>
+          <p>Здесь появятся матчи команды «Гвардия».</p>
+        </div>
+      )}
 
-            <div className="match-date">
-              {match.date}
-            </div>
+      <div className="matches-list">
+        {filteredMatches.map((match) => {
+          const homeName = getTeamDisplayName(match.homeTeam);
+          const awayName = getTeamDisplayName(match.awayTeam);
 
-            <div className="match-content">
+          const homeLogo = getTeamLogo(
+            homeName,
+            match.homeLogo
+          );
 
-              <div className="match-team">
+          const awayLogo = getTeamLogo(
+            awayName,
+            match.awayLogo
+          );
 
-                <div className="team-logo">
+          const finished = isFinished(match);
 
-                  <img
-                    src={gvardiyaLogo}
-                    alt="Гвардия"
-                  />
-
-                </div>
-
-                <span>
-                  ГВАРДИЯ
-                </span>
-
+          return (
+            <Link
+              to={`/matches/${match.id}`}
+              className="match-card"
+              key={match.id}
+            >
+              <div className="match-date">
+                {match.date || "Дата уточняется"}
               </div>
 
-              <div className="match-score">
+              <div className="match-content">
+                <div className="match-team">
+                  <TeamLogo
+                    teamName={homeName}
+                    logo={homeLogo}
+                  />
+                  <span>{homeName}</span>
+                </div>
 
-                <strong>
-                  {match.score}
-                </strong>
-
-                {match.time && (
+                <div className="match-score">
+                  <strong>{match.score || "— : —"}</strong>
                   <small>
-                    {match.time}
+                    {finished ? "ЗАВЕРШЁН" : "МАТЧ"}
                   </small>
-                )}
-
-              </div>
-
-              <div className="match-team">
-
-                <div className="team-logo">
-
-                  <img
-                    src={match.logo}
-                    alt={match.opponent}
-                  />
-
                 </div>
 
-                <span>
-                  {match.opponent}
-                </span>
-
+                <div className="match-team">
+                  <TeamLogo
+                    teamName={awayName}
+                    logo={awayLogo}
+                  />
+                  <span>{awayName}</span>
+                </div>
               </div>
 
-            </div>
-
-            <div className="match-arrow">
-              ›
-            </div>
-
-          </button>
-
-        ))}
-
-      </section>
-
-    </main>
+              <div className="match-arrow">›</div>
+            </Link>
+          );
+        })}
+      </div>
+    </div>
   );
 }

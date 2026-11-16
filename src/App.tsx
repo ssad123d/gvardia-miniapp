@@ -1,98 +1,86 @@
 import { Routes, Route } from "react-router-dom";
-
-import Home from "./pages/Home";
-import Matches from "./pages/Matches/index";
-import MatchArticle from "./pages/MatchArticle";
-import Schedule from "./pages/Schedule";
-import Table from "./pages/Table";
-import Squad from "./pages/Squad";
-import Player from "./pages/Player";
-import News from "./pages/News";
-import NewsArticle from "./pages/NewsArticle";
-
-import Tournaments from "./pages/Tournaments";
-import Tournament from "./pages/Tournament";
-
-import ArchiveMatches from "./pages/ArchiveMatches";
-import ArchivePlayoff from "./pages/ArchivePlayoff";
-
+import Home from "./pages/Home"; import Matches from "./pages/Matches/index"; import MatchArticle from "./pages/MatchArticle"; import Schedule from "./pages/Schedule"; import Table from "./pages/Table"; import Squad from "./pages/Squad"; import Player from "./pages/Player"; import News from "./pages/News"; import NewsArticle from "./pages/NewsArticle";
+import Tournaments from "./pages/Tournaments"; import Tournament from "./pages/Tournament";
+import ArchiveMatches from "./pages/ArchiveMatches"; import ArchiveTable from "./pages/ArchiveTable"; import ArchivePlayoff from "./pages/ArchivePlayoff";
 import BottomNav from "./components/BottomNav";
+function App() { return ( <> <Routes> {/* Главная */} <Route path="/" element={<Home />} />
+    {/* Матчи */}
+    <Route path="/matches" element={<Matches />} />
 
-function App() {
-  return (
-    <>
-      <Routes>
-        {/* Главная */}
-        <Route path="/" element={<Home />} />
+    <Route
+      path="/matches/:id"
+      element={<MatchArticle />}
+    />
 
-        {/* Матчи */}
-        <Route path="/matches" element={<Matches />} />
+    {/* Расписание */}
+    <Route
+      path="/schedule"
+      element={<Schedule />}
+    />
 
-        <Route
-          path="/matches/:id"
-          element={<MatchArticle />}
-        />
+    {/* Таблица текущего сезона */}
+    <Route
+      path="/table"
+      element={<Table />}
+    />
 
-        {/* Расписание */}
-        <Route path="/schedule" element={<Schedule />} />
+    {/* Турниры */}
+    <Route
+      path="/tournaments"
+      element={<Tournaments />}
+    />
 
-        {/* Таблица */}
-        <Route path="/table" element={<Table />} />
+    {/* Страница конкретного турнира */}
+    <Route
+      path="/tournaments/:id"
+      element={<Tournament />}
+    />
 
-        {/* Турниры */}
-        <Route
-          path="/tournaments"
-          element={<Tournaments />}
-        />
+    {/* Архив Кубка КСЛ 2025/26 */}
+    <Route
+      path="/tournaments/archive/matches"
+      element={<ArchiveMatches />}
+    />
 
-        {/* Страница конкретного турнира */}
-        <Route
-          path="/tournaments/:id"
-          element={<Tournament />}
-        />
+    <Route
+      path="/tournaments/archive/table"
+      element={<ArchiveTable />}
+    />
 
-        {/* Архив Кубка КСЛ 2025/26 */}
-        <Route
-          path="/tournaments/archive/matches"
-          element={<ArchiveMatches />}
-        />
+    <Route
+      path="/tournaments/archive/playoff"
+      element={<ArchivePlayoff />}
+    />
 
-        <Route
-          path="/tournaments/archive/table"
-          element={<Table />}
-        />
+    {/* Состав */}
+    <Route
+      path="/squad"
+      element={<Squad />}
+    />
 
-        <Route
-          path="/tournaments/archive/playoff"
-          element={<ArchivePlayoff />}
-        />
+    <Route
+      path="/squad/player"
+      element={<Player />}
+    />
 
-        {/* Состав */}
-        <Route
-          path="/squad"
-          element={<Squad />}
-        />
+    {/* Игрок */}
+    <Route
+      path="/squad/player/:id"
+      element={<Player />}
+    />
 
-        <Route
-          path="/squad/player/:id"
-          element={<Player />}
-        />
+    {/* Новости */}
+    <Route
+      path="/news"
+      element={<News />}
+    />
 
-        {/* Новости */}
-        <Route
-          path="/news"
-          element={<News />}
-        />
+    <Route
+      path="/news/:id"
+      element={<NewsArticle />}
+    />
+  </Routes>
 
-        <Route
-          path="/news/:id"
-          element={<NewsArticle />}
-        />
-      </Routes>
-
-      <BottomNav />
-    </>
-  );
-}
-
+  <BottomNav />
+</>); }
 export default App;

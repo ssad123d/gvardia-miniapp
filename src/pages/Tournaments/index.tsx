@@ -4,7 +4,7 @@ import "./Tournaments.css";
 const tournaments = [
   {
     id: "current",
-    title: "Кубок КСЛ 2026/27",
+    title: "Корпоративная Супер Лига",
     status: "СКОРО",
     statusType: "current",
     description:

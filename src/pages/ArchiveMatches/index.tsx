@@ -24,7 +24,7 @@ const archiveMatches = [
   },
 ];
 
-const gvardiyaLogo = "/src/assets/gvardiya.jpg";
+const gvardiyaLogo = "/src/assets/gvardiya.png";
 
 export default function ArchiveMatches() {
   const navigate = useNavigate();

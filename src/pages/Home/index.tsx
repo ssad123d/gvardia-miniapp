@@ -1,379 +1,341 @@
-import { useEffect, useRef, useState } from "react"; import { useNavigate } from "react-router-dom"; import "./Home.css";
-import gvardiyaLogo from "../../assets/gvardiya.jpg";
-type NewsItem = { id: number; date: string; title: string; text: string; };
-const news: NewsItem[] = [ { id: 1, date: "12 СЕНТЯБРЯ 2026", title: "ФК «Гвардия» готовится к следующему матчу", text: "Команда продолжает подготовку к очередной игре в рамках Кубка КСЛ.", }, { id: 2, date: "10 СЕНТЯБРЯ 2026", title: "Итоги последнего матча", text: "Подводим итоги прошедшей встречи и готовимся к следующим матчам.", }, { id: 3, date: "8 СЕНТЯБРЯ 2026", title: "Обновление состава команды", text: "В составе команды произошли изменения. Следите за актуальным составом.", }, ];
-function Home() { const navigate = useNavigate();
-const [currentNews, setCurrentNews] = useState(0);
-const touchStartX = useRef<number | null>(null); const touchEndX = useRef<number | null>(null);
-useEffect(() => { const interval = setInterval(() => { setCurrentNews((prev) => (prev + 1) % news.length); }, 5000);
-return () => clearInterval(interval);}, []);
-const handleTouchStart = (event: React.TouchEvent) => { touchStartX.current = event.touches[0].clientX; };
-const handleTouchMove = (event: React.TouchEvent) => { touchEndX.current = event.touches[0].clientX; };
-const handleTouchEnd = () => { if ( touchStartX.current === null || touchEndX.current === null ) { return; }
-const distance =
-  touchStartX.current - touchEndX.current;
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "./Home.css";
 
-if (distance > 50) {
-  setCurrentNews(
-    (prev) => (prev + 1) % news.length
-  );
+import {
+  getTeamDisplayName,
+  getTeamLogo,
+} from "../../utils/teamLogos";
+
+import {
+  getRKSportMatches,
+  getRKSportTable,
+  type RKSportMatch,
+  type RKSportTeam,
+} from "../../api/rksport";
+
+function getOpponent(match: RKSportMatch) {
+  const isGvardiyaHome = match.homeTeam
+    .toLowerCase()
+    .includes("гвард");
+
+  return isGvardiyaHome
+    ? {
+        name: getTeamDisplayName(match.awayTeam),
+        logo: getTeamLogo(match.awayTeam, match.awayLogo),
+      }
+    : {
+        name: getTeamDisplayName(match.homeTeam),
+        logo: getTeamLogo(match.homeTeam, match.homeLogo),
+      };
 }
 
-if (distance < -50) {
-  setCurrentNews(
-    (prev) =>
-      (prev - 1 + news.length) % news.length
-  );
+function formatMatchDate(match: RKSportMatch) {
+  return match.date || "Дата уточняется";
 }
 
-touchStartX.current = null;
-touchEndX.current = null;};
-const activeNews = news[currentNews];
-return ( <div className="home-page">
-  {/* HEADER */}
-  <header className="home-header">
-
-    <div className="home-logo">
-      <img
-        src={gvardiyaLogo}
-        alt="ФК Гвардия"
-      />
-    </div>
-
-    <div className="home-title">
-      <h1>ФК «ГВАРДИЯ»</h1>
-
-      <span>
-        БОЛЬШЕ ЧЕМ КОМАНДА
-      </span>
-    </div>
-
-    <button
-      className="notification-button"
-      onClick={() => navigate("/news")}
-    >
-      🔔
-    </button>
-
-  </header>
-
-  {/* HERO */}
-  <section className="home-hero">
-
-    <img
-      className="hero-logo"
-      src={gvardiyaLogo}
-      alt="ФК Гвардия"
-    />
-
-    <div className="hero-overlay">
-
-      <div className="hero-title">
-        ВМЕСТЕ К НОВЫМ
-        <br />
-        ПОБЕДАМ
-      </div>
-
-    </div>
-
-  </section>
-
-  {/* NEXT MATCH */}
-  <section className="home-section">
-
-    <div className="section-title-row">
-
-      <h2>
-        БЛИЖАЙШИЙ МАТЧ
-      </h2>
-
-      <span>
-        Кубок КСЛ
-      </span>
-
-    </div>
-
-    <div className="next-match-card">
-
-      <div className="team-block">
-
-        <div className="team-logo big-logo">
-          <img
-            src={gvardiyaLogo}
-            alt="Гвардия"
-          />
-        </div>
-
-        <strong>
-          ГВАРДИЯ
-        </strong>
-
-      </div>
-
-      <div className="match-info">
-
-        <div className="match-date">
-          20 СЕНТЯБРЯ 2026
-        </div>
-
-        <div className="match-time">
-          19:00
-        </div>
-
-        <div className="match-place">
-          📍 РК Спорт
-        </div>
-
-      </div>
-
-      <div className="team-block">
-
-        <div className="opponent-logo">
-          ⚽
-        </div>
-
-        <strong>
-          СОПЕРНИК
-        </strong>
-
-      </div>
-
-      <button
-        className="gold-button"
-        onClick={() => navigate("/matches")}
-      >
-        ПОДРОБНЕЕ О МАТЧЕ
-
-        <span>
-          →
-        </span>
-
-      </button>
-
-    </div>
-
-  </section>
-
-  {/* LAST RESULT */}
-  <section className="home-section">
-
-    <div className="section-title-row">
-
-      <h2>
-        ПОСЛЕДНИЙ РЕЗУЛЬТАТ
-      </h2>
-
-      <span>
-        Кубок КСЛ
-      </span>
-
-    </div>
-
-    <div className="result-card">
-
-      <div className="result-team">
-
-        <div className="result-logo">
-          <img
-            src={gvardiyaLogo}alt="Гвардия"
-          />
-        </div>
-
-        <strong>
-          ГВАРДИЯ
-        </strong>
-
-      </div>
-
-      <div className="result-score">
-
-        <span className="result-status">
-          ФИНАЛЬНЫЙ СЧЁТ
-        </span>
-
-        <strong>
-          5 : 6
-        </strong>
-
-        <span className="result-date">
-          30 АВГУСТА 2026
-        </span>
-
-      </div>
-
-      <div className="result-team">
-
-        <div className="opponent-logo result-opponent">
-          ⚽
-        </div>
-
-        <strong>
-          ИНТЕРНАЦИОНАЛ
-        </strong>
-
-      </div>
-
-    </div>
-
-    <button
-      className="result-details-button"
-      onClick={() => navigate("/matches")}
-    >
-      ПОСМОТРЕТЬ МАТЧ
-
-      <span>
-        →
-      </span>
-
-    </button>
-
-  </section>
-
-  {/* NEWS */}
-  <section className="home-section">
-
-    <div className="section-title-row">
-
-      <h2>
-        ПОСЛЕДНИЕ НОВОСТИ
-      </h2>
-
-      <button
-        className="all-news-button"
-        onClick={() => navigate("/news")}
-      >
-        Все новости →
-      </button>
-
-    </div>
-
-    {/* NEWS CAROUSEL */}
-    <div
-      className="home-news-carousel"
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
-    >
-
-      <article
-        className="home-news-card"
-        onClick={() =>
-          navigate(`/news/${activeNews.id}`)
+export default function Home() {
+  const navigate = useNavigate();
+
+  const [matches, setMatches] = useState<RKSportMatch[]>([]);
+  const [table, setTable] = useState<RKSportTeam[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    let active = true;
+
+    async function loadHomeData() {
+      try {
+        const [matchesData, tableData] = await Promise.all([
+          getRKSportMatches(),
+          getRKSportTable(),
+        ]);
+
+        if (!active) return;
+
+        setMatches(matchesData);
+        setTable(tableData);
+        setError(false);
+      } catch (err) {
+        console.error("Ошибка загрузки главной страницы:", err);
+
+        if (active) {
+          setError(true);
         }
-      >
+      } finally {
+        if (active) {
+          setLoading(false);
+        }
+      }
+    }
 
-        <div className="news-image-placeholder">
+    void loadHomeData();
 
-          <img
-            src={gvardiyaLogo}
-            alt="ФК Гвардия"
-          />
+    return () => {
+      active = false;
+    };
+  }, []);
 
-        </div>
+  const nextMatch =
+    matches.find((match) => match.type === "upcoming") || null;
 
-        <div className="home-news-content">
+  const opponent = nextMatch ? getOpponent(nextMatch) : null;
 
-          <div className="home-news-date">
-            {activeNews.date}
+  return (
+    <main className="home-page">
+      {/* HEADER */}
+      <header className="home-header">
+        <div className="home-brand">
+          <div className="home-brand-logo">
+            <img src={getTeamLogo("Гвардия")} alt="ФК Гвардия" />
           </div>
 
-          <h3>
-            {activeNews.title}
-          </h3>
+          <div>
+            <strong>ФК «ГВАРДИЯ»</strong>
+            <span>Корпоративная Супер Лига</span>
+          </div>
+        </div>
 
-          <p className="home-news-preview">
-            {activeNews.text}
+        <button
+          className="home-notification"
+          type="button"
+          aria-label="Новости"
+          onClick={() => navigate("/news")}
+        >
+          🔔
+        </button>
+      </header>
+
+      {/* HERO */}
+      <section className="home-hero">
+        <div className="home-hero-glow" />
+
+        <div className="home-hero-content">
+          <span>Корпоративная Супер Лига</span>
+
+          <h1>
+            ВМЕСТЕ К
+            <br />
+            НОВЫМ ПОБЕДАМ
+          </h1>
+
+          <p>
+            Новый сезон уже начался.
+            <br />
+            Следи за «Гвардией» здесь.
           </p>
-
         </div>
 
-        <div className="news-arrow">
-          →
-        </div>
+        <img
+          className="home-hero-logo"
+          src={getTeamLogo("Гвардия")}
+          alt="Гвардия"
+        />
+      </section>
 
-      </article>
-
-      {/* DOTS */}
-      <div className="news-dots">
-
-        {news.map((item, index) => (
+      {/* NEXT MATCH */}
+      <section className="home-section">
+        <div className="home-section-heading">
+          <div>
+            <span>БЛИЖАЙШИЙ МАТЧ</span>
+            <h2>Следующая игра</h2>
+          </div>
 
           <button
-            key={item.id}
-            className={
-              index === currentNews
-                ? "news-dot active"
-                : "news-dot"
-            }
-            onClick={(event) => {
-              event.stopPropagation();
-              setCurrentNews(index);
-            }}
-            aria-label={`Новость ${index + 1}`}
-          />
+            type="button"
+            onClick={() => navigate("/schedule")}
+          >
+            Все →
+          </button>
+        </div>
 
-        ))}
+        {loading ? (
+          <div className="home-next-match">
+            Загружаем расписание...
+          </div>
+        ) : nextMatch && opponent ? (
+          <button
+            className="home-next-match"
+            type="button"
+            onClick={() => navigate(`/matches/${nextMatch.id}`)}
+          >
+            <div className="home-match-date">
+              <strong>{formatMatchDate(nextMatch)}</strong>
+              <span>{nextMatch.time || "Время уточняется"}</span>
+            </div>
 
-      </div>
+            <div className="home-match-team">
+              <div className="home-match-logo">
+                <img
+                  src={getTeamLogo("Гвардия")}
+                  alt="Гвардия"
+                />
+              </div>
 
-    </div>
+              <strong>ГВАРДИЯ</strong>
+            </div>
 
-  </section>
+            <div className="home-match-center">
+              <span>VS</span>
+              <small>{nextMatch.time || "Время уточняется"}</small>
+            </div>
 
-  {/* QUICK MENU */}
-  <section className="quick-menu">
+            <div className="home-match-team">
+              <div className="home-match-logo">
+                {opponent.logo ? (
+                  <img
+                    src={opponent.logo}
+                    alt={opponent.name}
+                    onError={(event) => {
+                      event.currentTarget.style.visibility = "hidden";
+                    }}
+                  />
+                ) : (
+                  <span>⚽</span>
+                )}
+              </div>
 
-    <button
-      onClick={() => navigate("/schedule")}
-    >
-      <span>
-        📅
-      </span>
+              <strong>{opponent.name.toUpperCase()}</strong>
+            </div>
 
-      <strong>
-        РАСПИСАНИЕ
-      </strong>
-    </button>
+            <div className="home-match-arrow">›</div>
+          </button>
+        ) : (
+          <div className="home-next-match">
+            {error
+              ? "Не удалось загрузить ближайший матч"
+              : "Предстоящие матчи пока не найдены"}
+          </div>
+        )}
+      </section>
 
-    <button
-      onClick={() => navigate("/table")}
-    >
-      <span>
-        🏆
-      </span>
+      {/* QUICK LINKS */}
+      <section className="home-quick-links">
+        <button
+          type="button"
+          onClick={() => navigate("/schedule")}
+        >
+          <span>📅</span>
+          <strong>Расписание</strong>
+        </button>
 
-      <strong>
-        ТУРНИРНАЯ
-        <br />
-        ТАБЛИЦА
-      </strong>
-    </button>
+        <button
+          type="button"
+          onClick={() => navigate("/table")}
+        >
+          <span>🏆</span>
+          <strong>Таблица</strong>
+        </button>
 
-    <button
-      onClick={() => navigate("/squad")}
-    >
-      <span>
-        👥
-      </span>
+        <button
+          type="button"
+          onClick={() => navigate("/squad")}
+        >
+          <span>👥</span>
+          <strong>Состав</strong>
+        </button>
 
-      <strong>
-        СОСТАВ
-      </strong>
-    </button>
+        <button
+          type="button"
+          onClick={() => navigate("/news")}
+        >
+          <span>📰</span>
+          <strong>Новости</strong>
+        </button>
+      </section>
 
-    <button
-      onClick={() => navigate("/news")}
-    >
-      <span>
-        📄
-      </span>
+      {/* TABLE */}
+      <section className="home-section">
+        <div className="home-section-heading">
+          <div>
+            <span>Корпоративная Супер Лига</span>
+            <h2>Турнирная таблица</h2>
+          </div>
 
-      <strong>
-        НОВОСТИ
-      </strong>
-    </button>
+          <button
+            type="button"
+            onClick={() => navigate("/table")}
+          >
+            Все →
+          </button>
+        </div>
 
-  </section>
+        {loading ? (
+          <div className="home-table">
+            <p>Загружаем турнирную таблицу...</p>
+          </div>
+        ) : table.length > 0 ? (
+          <div className="home-table">
+            {table.slice(0, 5).map((team) => {
+              const teamName = getTeamDisplayName(team.name);
+              const teamLogo = getTeamLogo(team.name, team.logo);
 
-</div>); }
-export default Home;
+              return (
+                <button
+                  key={team.id}
+                  type="button"
+                  className={`home-table-row ${
+                    team.name.toLowerCase().includes("гвард")
+                      ? "home-table-row-current"
+                      : ""
+                  }`}
+                  onClick={() => navigate("/table")}
+                >
+                  <span className="home-table-place">
+                    {team.position}
+                  </span>
+
+                  <div className="home-table-team">
+                    <div className="home-table-logo">
+                      {teamLogo ? (
+                        <img
+                          src={teamLogo}
+                          alt={teamName}
+                          onError={(event) => {
+                            event.currentTarget.style.visibility = "hidden";
+                          }}
+                        />
+                      ) : (
+                        <span>⚽</span>
+                      )}
+                    </div>
+
+                    <strong>{teamName}</strong>
+                  </div>
+
+                  <span className="home-table-games">
+                    {team.played}
+                  </span>
+
+                  <strong className="home-table-points">
+                    {team.points}
+                  </strong>
+                </button>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="home-table">
+            {error
+              ? "Не удалось загрузить турнирную таблицу"
+              : "Данных о командах пока нет"}
+          </div>
+        )}
+      </section>
+
+      {/* FOOTER INFO */}
+      <section className="home-season-info">
+        <div className="home-season-info-icon">🏆</div>
+
+        <div>
+          <strong>Сезон 2026/27</strong>
+          <p>
+            Следи за матчами, результатами и положением
+            «Гвардии» в новом чемпионате.
+          </p>
+        </div>
+      </section>
+    </main>
+  );
+}

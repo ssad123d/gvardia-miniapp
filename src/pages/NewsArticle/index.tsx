@@ -1,57 +1,129 @@
-import { useNavigate, useParams } from "react-router-dom"; import "./NewsArticle.css";
-type NewsArticleItem = { id: number; date: string; title: string; text: string; };
-const news: NewsArticleItem[] = [ { id: 1, date: "12 СЕНТЯБРЯ 2026", title: "ФК «Гвардия» готовится к следующему матчу", text: "ФК «Гвардия» продолжает подготовку к следующему матчу в рамках Кубка КСЛ.\n\nКоманда проводит тренировочный процесс и настраивается на предстоящую игру.\n\nВпереди важная встреча, поэтому команда продолжает работать над своей игрой и готовится показать максимальный результат.\n\nСледите за новостями команды, расписанием и результатами матчей в приложении.", }, { id: 2, date: "10 СЕНТЯБРЯ 2026", title: "Итоги последнего матча", text: "Команда провела очередной матч в рамках турнира.\n\nБлагодарим всех игроков и болельщиков за поддержку.\n\nКаждый матч — это новый опыт и возможность стать сильнее. Команда продолжает подготовку к следующим встречам.\n\nСледите за результатами и расписанием следующих матчей.", }, { id: 3, date: "8 СЕНТЯБРЯ 2026", title: "Обновление состава команды", text: "В составе ФК «Гвардия» произошли изменения.\n\nАктуальный список игроков и распределение по позициям уже доступны в разделе «Состав».\n\nСледите за обновлениями команды и знакомьтесь с игроками ФК «Гвардия» в приложении.", }, ];
-function NewsArticle() { const navigate = useNavigate(); const { id } = useParams();
-const article = news.find( (item) => item.id === Number(id) );
-if (!article) { return ( <div className="news-article-page"> <button className="news-back-button" onClick={() => navigate("/news")} > <span>←</span> Назад </button>
-    <div className="news-not-found">
-      <div className="news-not-found-icon">G</div>
 
-      <h1>Новость не найдена</h1>
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import {
+  getNewsById,
+  type NewsItem,
+} from "../News/newsStorage";
+import "./NewsArticle.css";
 
-      <p>
-        Возможно, новость была удалена или ссылка
-        устарела.
-      </p>
-    </div>
-  </div>
-);}
-return ( <div className="news-article-page"> <header className="news-article-header"> <button className="news-back-button" onClick={() => navigate("/news")} > <span>←</span> Назад </button>
-    <div className="news-article-brand">
-      ФК «ГВАРДИЯ»
-    </div>
-  </header>
+export default function NewsArticle() {
+  const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
 
-  <div className="news-article-image">
-    <div className="news-article-image-placeholder">
-      <span>G</span>
-    </div>
-  </div>
+  const [article, setArticle] = useState<NewsItem | undefined>();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  <article className="news-article">
-    <div className="news-article-date">
-      {article.date}
-    </div>
+  useEffect(() => {
+    let cancelled = false;
 
-    <h1>{article.title}</h1>
+    async function loadArticle() {
+      if (!id) {
+        setArticle(undefined);
+        setLoading(false);
+        return;
+      }
 
-    <div className="news-article-line" />
+      try {
+        setLoading(true);
+        setError("");
 
-    <div className="news-article-text">
-      {article.text
-        .split("\n\n")
-        .map((paragraph, index) => (
-          <p key={index}>{paragraph}</p>
-        ))}
-    </div>
-  </article>
+        const result = await getNewsById(id);
 
-  <button
-    className="news-bottom-back"
-    onClick={() => navigate("/news")}
-  >
-    <span>←</span>
-    Вернуться к новостям
-  </button>
-</div>); }
-export default NewsArticle;
+        if (!cancelled) {
+          setArticle(result);
+        }
+      } catch (err) {
+        console.error("Ошибка загрузки статьи:", err);
+
+        if (!cancelled) {
+          setError("Не удалось загрузить новость. Попробуй ещё раз.");
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    }
+
+    void loadArticle();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [id]);
+
+  if (loading) {
+    return (
+      <main className="news-article-page">
+        <button
+          className="news-article-back"
+          type="button"
+          onClick={() => navigate("/news")}
+        >
+          ← Все новости
+        </button>
+
+        <section className="news-article-content">
+          <h1>Загружаем новость...</h1>
+        </section>
+      </main>
+    );
+  }
+
+  if (error || !article) {
+    return (
+      <main className="news-article-page">
+        <button
+          className="news-article-back"
+          type="button"
+          onClick={() => navigate("/news")}
+        >
+          ← Все новости
+        </button>
+
+        <section className="news-article-content">
+          <h1>{error ? "Ошибка загрузки" : "Новость не найдена"}</h1>
+          <p>
+            {error || "Возможно, публикация была удалена."}
+          </p>
+        </section>
+      </main>
+    );
+  }
+
+  return (
+    <main className="news-article-page">
+      <button
+        className="news-article-back"
+        type="button"
+        onClick={() => navigate("/news")}
+      >
+        ← Все новости
+      </button>
+
+      <article className="news-article-content">
+        {article.image && (
+          <img
+            className="news-article-image"
+            src={article.image}
+            alt=""
+          />
+        )}
+
+        <div className="news-article-date">{article.date}</div>
+
+        <h1>{article.title}</h1>
+
+        <p className="news-article-preview">{article.preview}</p>
+
+        <div className="news-article-text">
+          {article.content.split("\n").map((paragraph, index) => (
+            <p key={index}>{paragraph}</p>
+          ))}
+        </div>
+      </article>
+    </main>
+  );
+}

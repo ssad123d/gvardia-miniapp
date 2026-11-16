@@ -1,109 +1,290 @@
-import gvardiyaLogo from "../../assets/gvardiya.jpg"; import interLogo from "../../assets/inter.png"; import selhozLogo from "../../assets/selhoz.png"; import duoLogo from "../../assets/duo.png"; import arsOilLogo from "../../assets/ars-oil.png"; import nomadLogo from "../../assets/nomad.png"; import superGeroiLogo from "../../assets/super-geroi.png"; import moguchayaKuchkaLogo from "../../assets/moguchaya-kuchka.png"; import rkSportLogo from "../../assets/rk-sport.png";
-type Team = { name: string; logo: string | null; games: number; wins: number; draws: number; losses: number; points: number; };
-const teams: Team[] = [ { name: "Сельхоз Юнайтед", logo: selhozLogo, games: 8, wins: 6, draws: 2, losses: 0, points: 20, }, { name: "DUO", logo: duoLogo, games: 8, wins: 6, draws: 2, losses: 0, points: 20, }, { name: "ARS OIL", logo: arsOilLogo, games: 8, wins: 5, draws: 0, losses: 3, points: 15, }, { name: "Nomad", logo: nomadLogo, games: 8, wins: 5, draws: 0, losses: 3, points: 15, }, { name: "Супер Герои", logo: superGeroiLogo, games: 8, wins: 4, draws: 2, losses: 2, points: 14, }, { name: "Могучая кучка | Buddies ...", logo: moguchayaKuchkaLogo, games: 8, wins: 4, draws: 0, losses: 4, points: 12, }, { name: "РК-Спорт", logo: rkSportLogo, games: 8, wins: 3, draws: 1, losses: 4, points: 10, }, { name: "МФК Симферополь", logo: null, games: 8, wins: 3, draws: 0, losses: 5, points: 9, }, { name: "RIBIZA", logo: null, games: 8, wins: 2, draws: 1, losses: 5, points: 7, }, { name: "Интер-Национал", logo: interLogo, games: 8, wins: 2, draws: 1, losses: 5, points: 7, }, { name: "Гвардия", logo: gvardiyaLogo, games: 8, wins: 2, draws: 0, losses: 6, points: 6, }, { name: "Название", logo: null, games: 8, wins: 1, draws: 1, losses: 6, points: 4, }, ];
-function Table() { return ( <div className="table-page"> <h1>ТАБЛИЦА</h1>
-  <p className="table-subtitle">
-    Кубок КСЛ
-  </p>
 
-  <div className="table-wrapper">
+import { useEffect, useState } from "react";
+import "./Table.css";
 
-    <div className="table-header">
-      <div className="position">#</div>
+import {
+  getTeamDisplayName,
+  getTeamLogo,
+} from "../../utils/teamLogos";
 
-      <div className="team-name">
-        КОМАНДА
-      </div>
+import { getRKSportTable } from "../../api/rksport";
+import type { RKSportTeam } from "../../api/rksport";
 
-      <div>И</div>
-      <div>В</div>
-      <div>Н</div>
-      <div>П</div>
-      <div>О</div>
-    </div>
+const TABLE_CACHE_KEY = "gvardia-table-page-cache-v1";
 
-    {teams.map((team, index) => (
-      <div
-        className={`table-row ${
-          team.name === "Гвардия"
-            ? "gvardia-row"
-            : ""
-        }`}
-        key={team.name}
-      >
+type TableCache = {
+  savedAt: string;
+  data: RKSportTeam[];
+};
 
-        <div className="position">
-          {index + 1}
+function normalizeTeamName(value: string): string {
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/ё/g, "е")
+    .replace(/[^а-яa-z0-9]/gi, "");
+}
+
+function readSavedTable(): TableCache | null {
+  try {
+    const raw = localStorage.getItem(TABLE_CACHE_KEY);
+
+    if (!raw) return null;
+
+    const cached = JSON.parse(raw) as TableCache;
+
+    if (
+      !Array.isArray(cached.data) ||
+      cached.data.length === 0
+    ) {
+      return null;
+    }
+
+    return cached;
+  } catch {
+    return null;
+  }
+}
+
+function saveTable(teams: RKSportTeam[]): void {
+  try {
+    if (teams.length === 0) return;
+
+    const cache: TableCache = {
+      savedAt: new Date().toISOString(),
+      data: teams,
+    };
+
+    localStorage.setItem(
+      TABLE_CACHE_KEY,
+      JSON.stringify(cache),
+    );
+  } catch (error) {
+    console.warn(
+      "Не удалось сохранить резервную таблицу",
+      error,
+    );
+  }
+}
+
+export default function Table() {
+  const [teams, setTeams] = useState<RKSportTeam[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [usingCache, setUsingCache] = useState(false);
+  const [savedAt, setSavedAt] = useState("");
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadTable() {
+      const cached = readSavedTable();
+
+      if (cached) {
+        setTeams(cached.data);
+        setSavedAt(cached.savedAt);
+        setUsingCache(true);
+        setLoading(false);
+      }
+
+      try {
+        const data = await getRKSportTable();
+
+        if (cancelled) return;
+
+        if (!Array.isArray(data) || data.length === 0) {
+          throw new Error("Получена пустая таблица");
+        }
+
+        saveTable(data);
+
+        setTeams(data);
+        setSavedAt(new Date().toISOString());
+        setUsingCache(false);
+        setError("");
+      } catch (err) {
+        console.error("Ошибка загрузки таблицы:", err);
+
+        if (cancelled) return;
+
+        const fallback = readSavedTable();
+
+        if (fallback) {
+          setTeams(fallback.data);
+          setSavedAt(fallback.savedAt);
+          setUsingCache(true);
+          setError("");
+        } else {
+          setError(
+            "РК-Спорт сейчас недоступен. Резервной таблицы пока нет. Она появится после первой успешной загрузки.",
+          );
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    }
+
+    void loadTable();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const formattedSavedAt = savedAt
+    ? new Date(savedAt).toLocaleString("ru-RU", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      })
+    : "";
+
+  return (
+    <main className="table-page">
+      <header className="table-header">
+        <div className="table-header-logo">
+          <img
+            src={getTeamLogo("Гвардия")}
+            alt="Гвардия"
+          />
         </div>
 
-        <div className="team-name">
+        <div>
+          <h1>ТАБЛИЦА</h1>
+          <p>Корпоративная Супер Лига</p>
+        </div>
+      </header>
 
-          <div className="team-logo">
+      <section className="table-card">
+        <div className="table-title">
+          <span>ТУРНИР</span>
+          <h2>Корпоративная Супер Лига</h2>
+        </div>
 
-            {team.logo ? (
-              <img src={team.logo ?? undefined} alt={team.name} />
-            ) : (
-              <div className="team-logo-placeholder">
-                {team.name.charAt(0)}
+        {loading && teams.length === 0 && (
+          <div className="table-state">
+            <div className="table-state-icon">⏳</div>
+            <strong>Загружаем таблицу...</strong>
+            <p>Получаем актуальные данные с РК-Спорт.</p>
+          </div>
+        )}
+
+        {!loading && error && teams.length === 0 && (
+          <div className="table-state table-error">
+            <div className="table-state-icon">⚠️</div>
+            <strong>Таблица временно недоступна</strong>
+            <p>{error}</p>
+          </div>
+        )}
+
+        {teams.length > 0 && (
+          <>
+            {usingCache && (
+              <div className="table-state">
+                <strong>
+                  ⚠️ Показана сохранённая таблица
+                </strong>
+                <p>
+                  РК-Спорт сейчас недоступен.
+                  {formattedSavedAt &&
+                    ` Последнее сохранение: ${formattedSavedAt}.`}
+                </p>
               </div>
             )}
 
-          </div>
+            {!usingCache && loading && (
+              <div className="table-state">
+                <p>Обновляем данные таблицы...</p>
+              </div>
+            )}
 
-          <strong>
-            {team.name}
-          </strong>
+            <div className="table-head">
+              <span>#</span>
+              <span>КОМАНДА</span>
+              <span>И</span>
+              <span>В</span>
+              <span>Н</span>
+              <span>П</span>
+              <span>О</span>
+            </div>
 
-        </div>
+            <div className="table-list">
+              {teams.map((team) => {
+                const teamName = getTeamDisplayName(team.name);
 
-        <div>
-          {team.games}
-        </div>
+                const normalizedName = normalizeTeamName(
+                  team.name,
+                );
 
-        <div>
-          {team.wins}
-        </div>
+                const isGvardiya =
+                  String(team.id) === "1498973" ||
+                  normalizedName.includes("гвардия");
 
-        <div>
-          {team.draws}
-        </div>
+                const teamLogo = getTeamLogo(
+                  teamName,
+                  team.logo,
+                );
 
-        <div>
-          {team.losses}
-        </div>
+                return (
+                  <div
+                    className={`table-row ${
+                      isGvardiya
+                        ? "table-row-gvardiya"
+                        : ""
+                    }`}
+                    key={team.id}
+                  >
+                    <div className="table-place">
+                      {team.position}
+                    </div>
 
-        <div className="points">
-          {team.points}
-        </div>
+                    <div className="table-team">
+                      <div className="table-team-logo">
+                        {teamLogo ? (
+                          <img
+                            src={teamLogo}
+                            alt={teamName}
+                          />
+                        ) : (
+                          <span>⚽</span>
+                        )}
+                      </div>
 
-      </div>
-    ))}
+                      <div className="table-team-info">
+                        <strong>{teamName}</strong>
 
-  </div>
+                        {team.city && (
+                          <span>{team.city}</span>
+                        )}
+                      </div>
+                    </div>
 
-  <div className="table-info">
+                    <div>{team.played}</div>
+                    <div>{team.wins}</div>
+                    <div>{team.draws}</div>
+                    <div>{team.losses}</div>
 
-    <p>
-      <b>И</b> — игры
-    </p>
+                    <div className="table-points">
+                      {team.points}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
 
-    <p>
-      <b>В</b> — победы
-    </p>
-
-    <p>
-      <b>Н</b> — ничьи
-    </p>
-
-    <p>
-      <b>П</b> — поражения
-    </p>
-
-    <p>
-      <b>О</b> — очки
-    </p>
-
-  </div>
-
-</div>); }
-export default Table;
+            <div className="table-updated">
+              <span />
+              {usingCache
+                ? "Показаны последние сохранённые данные"
+                : "Данные загружены с РК-Спорт"}
+            </div>
+          </>
+        )}
+      </section>
+    </main>
+  );
+}

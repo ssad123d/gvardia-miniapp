@@ -1,0 +1,276 @@
+
+.table-page {
+  min-height: 100vh;
+  padding: 18px 10px 105px;
+  background: #0f1013;
+  color: #fff;
+}
+
+.table-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.table-header-logo {
+  width: 52px;
+  height: 52px;
+  border-radius: 13px;
+  background: #1a1b20;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.table-header-logo img {
+  width: 43px;
+  height: 43px;
+  object-fit: contain;
+}
+
+.table-header h1 {
+  font-size: 25px;
+  line-height: 1;
+  font-weight: 900;
+}
+
+.table-header p {
+  margin-top: 6px;
+  color: #888;
+  font-size: 13px;
+}
+
+.table-card {
+  width: 100%;
+  background: #17181d;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 17px;
+  overflow: hidden;
+}
+
+.table-title {
+  padding: 17px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.table-title span {
+  display: block;
+  color: #888;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  margin-bottom: 6px;
+}
+
+.table-title h2 {
+  font-size: 17px;
+  font-weight: 900;
+}
+
+/* Шапка таблицы */
+
+.table-head,
+.table-row {
+  display: grid;
+  grid-template-columns: 29px minmax(0, 1fr) 24px 24px 24px 24px 31px;
+  align-items: center;
+  gap: 3px;
+}
+
+.table-head {
+  height: 39px;
+  padding: 0 9px;
+  color: #777;
+  font-size: 10px;
+  font-weight: 900;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.table-head span:nth-child(2) {
+  text-align: left;
+}
+
+/* Строка команды */
+
+.table-row {
+  height: 64px;
+  min-height: 64px;
+  padding: 5px 9px;
+  font-size: 12px;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  transition: background 0.2s ease;
+}
+
+.table-row:last-child {
+  border-bottom: none;
+}
+
+.table-place {
+  color: #999;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+/* Команда */
+
+.table-team {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+}
+
+.table-team-logo {
+  flex: 0 0 47px;
+  width: 47px;
+  height: 47px;
+  border-radius: 10px;
+  background: #222329;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.table-team-logo img {
+  width: 41px;
+  height: 41px;
+  object-fit: contain;
+}
+
+.table-team-info {
+  min-width: 0;
+  display: block;
+}
+
+.table-team-info strong {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+  line-height: 1.2;
+  font-weight: 850;
+}
+
+.table-team-info span {
+  display: none;
+}
+
+/* Очки */
+
+.table-points {
+  font-size: 14px;
+  font-weight: 900;
+  color: #f4c430;
+}
+
+/* Гвардия */
+
+.table-row-gvardiya {
+  background: rgba(255, 193, 7, 0.11);
+  box-shadow: inset 4px 0 0 #f4c430;
+}
+
+.table-row-gvardiya .table-place,
+.table-row-gvardiya .table-points {
+  color: #f4c430;
+}
+
+.table-row-gvardiya .table-team-info strong {
+  color: #fff;
+}
+
+/* Загрузка / ошибка */
+
+.table-state {
+  padding: 42px 16px;
+  text-align: center;
+}
+
+.table-state-icon {
+  font-size: 34px;
+  margin-bottom: 12px;
+}
+
+.table-state strong {
+  display: block;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.table-state p {
+  margin-top: 7px;
+  color: #888;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* Нижняя подпись */
+
+.table-updated {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 13px 8px;
+  color: #777;
+  font-size: 11px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.table-updated span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #4caf50;
+}
+
+/* Маленькие телефоны */
+
+@media (max-width: 380px) {
+  .table-page {
+    padding-left: 7px;
+    padding-right: 7px;
+  }
+
+  .table-head,
+  .table-row {
+    grid-template-columns: 25px minmax(0, 1fr) 19px 19px 19px 19px 27px;
+    gap: 2px;
+  }
+
+  .table-row {
+    height: 57px;
+    min-height: 57px;
+  }
+
+  .table-team-logo {
+    width: 40px;
+    height: 40px;
+    flex-basis: 40px;
+  }
+
+  .table-team-logo img {
+    width: 35px;
+    height: 35px;
+  }
+
+  .table-team {
+    gap: 7px;
+  }
+
+  .table-team-info strong {
+    font-size: 11px;
+  }
+
+  .table-row {
+    font-size: 10px;
+  }
+}
