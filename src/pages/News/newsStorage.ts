@@ -33,11 +33,35 @@ function getTelegramWebApp(): TelegramWebApp | undefined {
   ).Telegram?.WebApp;
 }
 
-// Это только для отображения кнопок.
-// Сервер отдельно проверяет подлинность initData.
 export function isNewsAdmin(): boolean {
   const userId = getTelegramWebApp()?.initDataUnsafe?.user?.id;
   return Number(userId) === ADMIN_ID;
+}
+
+async function callNewsFunction(body: Record<string, unknown>) {
+  const initData = getTelegramWebApp()?.initData;
+
+  if (!initData) {
+    throw new Error("Открой приложение через Telegram");
+  }
+
+  const { data, error } = await supabase.functions.invoke(
+    FUNCTION_NAME,
+    {
+      body: { ...body, initData },
+    },
+  );
+
+  if (error) {
+    console.error("Ошибка функции новостей:", error);
+    throw error;
+  }
+
+  if (!data?.success) {
+    throw new Error(data?.error || "Операция не выполнена");
+  }
+
+  return data;
 }
 
 export async function getNews(): Promise<NewsItem[]> {
@@ -84,30 +108,34 @@ export async function getNewsById(
 export async function addNews(
   item: Omit<NewsItem, "id" | "created_at">,
 ): Promise<NewsItem> {
-  const initData = getTelegramWebApp()?.initData;
+  const data = await callNewsFunction({
+    action: "create",
+    item,
+  });
 
-  if (!initData) {
-    throw new Error("Открой приложение через Telegram");
+  if (!data.news) {
+    throw new Error("Сервер не вернул созданную новость");
   }
 
-  const { data, error } = await supabase.functions.invoke(
-    FUNCTION_NAME,
-    {
-      body: {
-        initData,
-        action: "create",
-        item,
-      },
-    },
-  );
+  return {
+    ...data.news,
+    id: String(data.news.id),
+    image: data.news.image ?? undefined,
+  };
+}
 
-  if (error) {
-    console.error("Ошибка публикации новости:", error);
-    throw error;
-  }
+export async function updateNews(
+  id: string,
+  item: Omit<NewsItem, "id" | "created_at">,
+): Promise<NewsItem> {
+  const data = await callNewsFunction({
+    action: "update",
+    id,
+    item,
+  });
 
-  if (!data?.success || !data?.news) {
-    throw new Error(data?.error || "Не удалось опубликовать новость");
+  if (!data.news) {
+    throw new Error("Сервер не вернул обновлённую новость");
   }
 
   return {
@@ -118,29 +146,8 @@ export async function addNews(
 }
 
 export async function deleteNews(id: string): Promise<void> {
-  const initData = getTelegramWebApp()?.initData;
-
-  if (!initData) {
-    throw new Error("Открой приложение через Telegram");
-  }
-
-  const { data, error } = await supabase.functions.invoke(
-    FUNCTION_NAME,
-    {
-      body: {
-        initData,
-        action: "delete",
-        id,
-      },
-    },
-  );
-
-  if (error) {
-    console.error("Ошибка удаления новости:", error);
-    throw error;
-  }
-
-  if (!data?.success) {
-    throw new Error(data?.error || "Не удалось удалить новость");
-  }
+  await callNewsFunction({
+    action: "delete",
+    id,
+  });
 }

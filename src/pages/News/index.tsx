@@ -5,6 +5,7 @@ import "./news.css";
 
 import {
   addNews,
+  updateNews,
   deleteNews,
   getNews,
   isNewsAdmin,
@@ -20,6 +21,7 @@ function News() {
   const [showForm, setShowForm] = useState(false);
   const [saving, setSaving] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
 
   const admin = isNewsAdmin();
 
@@ -36,6 +38,40 @@ function News() {
   const [preview, setPreview] = useState("");
   const [content, setContent] = useState("");
   const [image, setImage] = useState("");
+
+  function resetForm() {
+    setTitle("");
+    setDate(
+      new Date()
+        .toLocaleDateString("ru-RU", {
+          day: "2-digit",
+          month: "long",
+          year: "numeric",
+        })
+        .toUpperCase(),
+    );
+    setPreview("");
+    setContent("");
+    setImage("");
+    setEditingId(null);
+    setShowForm(false);
+  }
+
+  function handleEdit(item: NewsItem) {
+    setEditingId(item.id);
+    setTitle(item.title);
+    setDate(item.date);
+    setPreview(item.preview);
+    setContent(item.content);
+    setImage(item.image ?? "");
+    setError("");
+    setShowForm(true);
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }
 
   useEffect(() => {
     let cancelled = false;
@@ -54,7 +90,9 @@ function News() {
         console.error("Ошибка загрузки новостей:", err);
 
         if (!cancelled) {
-          setError("Не удалось загрузить новости. Попробуй обновить страницу.");
+          setError(
+            "Не удалось загрузить новости. Попробуй обновить страницу.",
+          );
         }
       } finally {
         if (!cancelled) {
@@ -70,39 +108,52 @@ function News() {
     };
   }, []);
 
-  async function handleAddNews(event: FormEvent<HTMLFormElement>) {
+  async function handleSaveNews(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     if (!admin || saving) return;
+
+    const item = {
+      title: title.trim(),
+      date: date.trim(),
+      preview: preview.trim(),
+      content: content.trim(),
+      image: image.trim() || undefined,
+    };
 
     try {
       setSaving(true);
       setError("");
 
-      const item = await addNews({
-        title: title.trim(),
-        date: date.trim(),
-        preview: preview.trim(),
-        content: content.trim(),
-        image: image.trim() || undefined,
-      });
+      if (editingId) {
+        const updatedItem = await updateNews(editingId, item);
 
-      setNews((current) => [
-        item,
-        ...current.filter((newsItem) => newsItem.id !== item.id),
-      ]);
+        setNews((current) =>
+          current.map((newsItem) =>
+            newsItem.id === updatedItem.id
+              ? updatedItem
+              : newsItem,
+          ),
+        );
+      } else {
+        const newItem = await addNews(item);
 
-      setTitle("");
-      setPreview("");
-      setContent("");
-      setImage("");
-      setShowForm(false);
+        setNews((current) => [
+          newItem,
+          ...current.filter(
+            (newsItem) => newsItem.id !== newItem.id,
+          ),
+        ]);
+      }
+
+      resetForm();
     } catch (err) {
-      console.error("Ошибка публикации:", err);
+      console.error("Ошибка сохранения новости:", err);
+
       setError(
         err instanceof Error
           ? err.message
-          : "Не удалось опубликовать новость.",
+          : "Не удалось сохранить новость.",
       );
     } finally {
       setSaving(false);
@@ -110,7 +161,7 @@ function News() {
   }
 
   async function handleDelete(id: string) {
-    if (!admin || deletingId) return;
+    if (!admin || deletingId || saving) return;
 
     if (!window.confirm("Удалить эту новость?")) return;
 
@@ -120,9 +171,16 @@ function News() {
 
       await deleteNews(id);
 
-      setNews((current) => current.filter((item) => item.id !== id));
+      setNews((current) =>
+        current.filter((item) => item.id !== id),
+      );
+
+      if (editingId === id) {
+        resetForm();
+      }
     } catch (err) {
       console.error("Ошибка удаления новости:", err);
+
       setError(
         err instanceof Error
           ? err.message
@@ -144,7 +202,14 @@ function News() {
           <button
             className="news-more"
             type="button"
-            onClick={() => setShowForm((value) => !value)}
+            onClick={() => {
+              if (showForm) {
+                resetForm();
+              } else {
+                setError("");
+                setShowForm(true);
+              }
+            }}
           >
             {showForm ? "Закрыть форму" : "+ Добавить новость"}
           </button>
@@ -152,8 +217,15 @@ function News() {
       </header>
 
       {admin && showForm && (
-        <form className="news-editor" onSubmit={handleAddNews}>
-          <h2>Новая публикация</h2>
+        <form
+          className="news-editor"
+          onSubmit={handleSaveNews}
+        >
+          <h2>
+            {editingId
+              ? "Редактирование новости"
+              : "Новая публикация"}
+          </h2>
 
           <label>
             Заголовок
@@ -214,8 +286,23 @@ function News() {
             type="submit"
             disabled={saving}
           >
-            {saving ? "Публикуем..." : "Опубликовать"}
+            {saving
+              ? "Сохраняем..."
+              : editingId
+                ? "Сохранить изменения"
+                : "Опубликовать"}
           </button>
+
+          {editingId && (
+            <button
+              className="news-delete"
+              type="button"
+              disabled={saving}
+              onClick={resetForm}
+            >
+              Отменить редактирование
+            </button>
+          )}
         </form>
       )}
 
@@ -254,21 +341,35 @@ function News() {
                   <h2>{item.title}</h2>
                   <p>{item.preview}</p>
                   <span className="news-more">
-                    Читать далее <span className="news-arrow">→</span>
+                    Читать далее{" "}
+                    <span className="news-arrow">→</span>
                   </span>
                 </div>
               </button>
 
               {admin && (
-                <button
-                  className="news-delete"
-                  type="button"
-                  disabled={deletingId !== null}
-                  onClick={() => void handleDelete(item.id)}
-                  aria-label={`Удалить новость: ${item.title}`}
-                >
-                  {deletingId === item.id ? "Удаляем..." : "Удалить"}
-                </button>
+                <div className="news-admin-actions">
+                  <button
+                    className="news-more"
+                    type="button"
+                    disabled={saving || deletingId !== null}
+                    onClick={() => handleEdit(item)}
+                  >
+                    Редактировать
+                  </button>
+
+                  <button
+                    className="news-delete"
+                    type="button"
+                    disabled={deletingId !== null || saving}
+                    onClick={() => void handleDelete(item.id)}
+                    aria-label={`Удалить новость: ${item.title}`}
+                  >
+                    {deletingId === item.id
+                      ? "Удаляем..."
+                      : "Удалить"}
+                  </button>
+                </div>
               )}
             </article>
           ))
